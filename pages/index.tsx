@@ -1,65 +1,69 @@
-import Head from 'next/head'
-import Image from 'next/image'
+import styles from "@/pages/index.module.css";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { parse } from "papaparse";
 
-import styles from '@/pages/index.module.css'
+type Record = {};
+export default function Home({ data }) {
+	console.log(data);
 
-export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing <code>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a href="https://vercel.com/new" className={styles.card}>
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
-    </div>
-  )
+	return (
+		<section>
+			<h1>Lifting dashboard</h1>
+			{data.map((text) => (
+				<ul>
+					{text.map((t) => (
+						<li>{t}</li>
+					))}
+				</ul>
+			))}
+		</section>
+	);
 }
+
+export const getServerSideProps: GetServerSideProps = async ({
+	req,
+}: GetServerSidePropsContext) => {
+	const resp = await fetch(
+		"https://docs.google.com/spreadsheets/d/e/2PACX-1vQbmSO_PytKWSd2TSuEN2mtxbCDU_DgmPyU-OGBpRNDMMrB1UIWG7E67RVDkKA-fveOPDJZit1P2Jsj/pub?gid=1180621188&single=true&output=csv"
+	);
+
+	const text = await resp.text();
+	const parsed: string[] = parse(text, {
+		delimiter: ",",
+		// columns: 10,
+		// header: true,
+		skipEmptyLines: "greedy",
+		// preview: 2,
+		// newline: "\n",
+	})
+		.data.flat()
+		.filter((f) => f !== "");
+
+	return {
+		props: {
+			data: parseCSV(parsed),
+		},
+	};
+};
+
+const parseCSV = (data: string[]) => {
+	const firstLineIndex = data.findIndex((a) => a === "A");
+	const newData = data.slice(firstLineIndex);
+	const records: Record[] = [];
+
+	newData.map((text: string, index: number) => {
+		if (text === "A" || text === "B" || text === "C" || text === "D") {
+			const nextIndex = newData
+				.slice(1)
+				.findIndex((element: string) => element === "A");
+
+			records.push(
+				newData
+					.map((text) => text.trim())
+					.slice(1 + index, nextIndex + index - 2)
+			);
+		}
+	});
+
+	return records;
+};
