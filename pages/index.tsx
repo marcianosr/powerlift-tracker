@@ -32,8 +32,11 @@ export default function Home({ data }) {
 		<section>
 			<h1>Lifting dashboard</h1>
 			<section>
-				Sets over: {setsCounter}
-				<ExcersiseList excersises={excersiseToShow} reps={parsedReps} />
+				<ExcersiseList
+					excersises={excersiseToShow}
+					reps={parsedReps}
+					setsCounter={setsCounter}
+				/>
 			</section>
 			<button
 				onClick={() => {

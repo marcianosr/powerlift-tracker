@@ -4,6 +4,7 @@ import ExcersiseInfoItem from "../ExcersiseInfoItem";
 type ExcersiseListProps = {
 	excersises: ExceriseInfoItems[];
 	reps: string;
+	setsCounter: number;
 };
 
 type ExceriseInfoItems = {
@@ -12,7 +13,11 @@ type ExceriseInfoItems = {
 	reps: string;
 };
 
-const ExcersiseList: FC<ExcersiseListProps> = ({ excersises, reps }) => (
+const ExcersiseList: FC<ExcersiseListProps> = ({
+	excersises,
+	reps,
+	setsCounter,
+}) => (
 	<ul>
 		{excersises.map(
 			(
@@ -20,6 +25,8 @@ const ExcersiseList: FC<ExcersiseListProps> = ({ excersises, reps }) => (
 				idx: number
 			) => (
 				<Fragment key={idx}>
+					{idx === 0 && <h1>Sets over: {setsCounter}</h1>}
+					{idx === 1 && <h1>Up next</h1>}
 					<ExcersiseInfoItem
 						excersise={excersise}
 						sets={sets}
