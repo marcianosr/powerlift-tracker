@@ -1,5 +1,5 @@
 import styles from "@/pages/index.module.css";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { GetServerSideProps } from "next";
 import { parse } from "papaparse";
 import { useEffect, useState } from "react";
 import ExcersiseList from "@/components/ExcersiseList";
@@ -48,15 +48,13 @@ export default function Home({ data }) {
 	);
 }
 
-export const getServerSideProps: GetServerSideProps = async ({
-	req,
-}: GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps = async () => {
 	const resp = await fetch(
 		"https://docs.google.com/spreadsheets/d/e/2PACX-1vQbmSO_PytKWSd2TSuEN2mtxbCDU_DgmPyU-OGBpRNDMMrB1UIWG7E67RVDkKA-fveOPDJZit1P2Jsj/pub?gid=1180621188&single=true&output=csv"
 	);
 
 	const text = await resp.text();
-	const parsed: string[] = parse(text, {
+	const parsed = parse(text, {
 		delimiter: ",",
 		// columns: 10,
 		// header: true,
@@ -69,7 +67,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
 	return {
 		props: {
-			data: parseCSV(parsed),
+			data: parseCSV(parsed as string[]),
 		},
 	};
 };

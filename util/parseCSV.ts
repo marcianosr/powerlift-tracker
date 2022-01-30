@@ -1,7 +1,7 @@
 export const parseCSV = (data: string[]) => {
 	const firstLineIndex = data.findIndex((a) => a === "A");
 	const newData = data.slice(firstLineIndex);
-	const records = [];
+	const records: string[][] = [];
 
 	newData.map((text: string, index: number) => {
 		if (text === "A" || text === "B" || text === "C" || text === "D") {
