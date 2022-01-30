@@ -11,6 +11,12 @@ type ExceriseInfoItems = {
 	excersise: string;
 	sets: string;
 	reps: string;
+	lastTimeLifts: LastTimeLifts;
+};
+
+export type LastTimeLifts = {
+	lift: string;
+	RPE: string;
 };
 
 const ExcersiseList: FC<ExcersiseListProps> = ({
@@ -21,7 +27,15 @@ const ExcersiseList: FC<ExcersiseListProps> = ({
 	<ul>
 		{excersises.map(
 			(
-				{ excersise, sets }: { excersise: string; sets: string },
+				{
+					excersise,
+					sets,
+					lastTimeLifts,
+				}: {
+					excersise: string;
+					sets: string;
+					lastTimeLifts: LastTimeLifts;
+				},
 				idx: number
 			) => (
 				<Fragment key={idx}>
@@ -31,6 +45,7 @@ const ExcersiseList: FC<ExcersiseListProps> = ({
 						excersise={excersise}
 						sets={sets}
 						reps={reps}
+						lastTimeLifts={lastTimeLifts}
 					/>
 				</Fragment>
 			)

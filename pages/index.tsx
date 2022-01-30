@@ -7,10 +7,18 @@ import { parseCSV } from "util/parseCSV";
 
 export default function Home({ data }) {
 	const dataToLift = data.map(
-		([excersise, sets, reps]: [string, string, string]) => ({
+		([excersise, sets, reps, ...lastTimeLifts]: [
+			string,
+			string,
+			string
+		]) => ({
 			excersise,
 			sets,
 			reps,
+			lastTimeLifts: {
+				lift: lastTimeLifts[lastTimeLifts.length - 1],
+				RPE: lastTimeLifts[lastTimeLifts.length - 2],
+			},
 		})
 	);
 
