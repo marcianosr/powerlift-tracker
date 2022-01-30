@@ -1,21 +1,48 @@
 import styles from "@/pages/index.module.css";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { parse } from "papaparse";
+import { useEffect, useState } from "react";
+import ExcersiseList from "@/components/ExcersiseList";
 
-type Record = {};
 export default function Home({ data }) {
-	console.log(data);
+	const dataToLift = data.map(
+		([excersise, sets, reps]: [string, string, string]) => ({
+			excersise,
+			sets,
+			reps,
+		})
+	);
+
+	const [slideIndex, setSlideIndex] = useState(0);
+	const excersiseToShow = dataToLift.slice(slideIndex, slideIndex + 2);
+	const [currentExcersise] = excersiseToShow;
+	const amountOfSets = +currentExcersise.sets;
+	const [setsCounter, setSetsCounter] = useState(amountOfSets);
+
+	const parsedReps = currentExcersise.reps
+		.split(/x|<=|\s/)
+		.filter((text: string) => text !== "")[0];
+
+	useEffect(() => {
+		setSetsCounter(amountOfSets);
+	}, [amountOfSets, currentExcersise.excersise]);
 
 	return (
 		<section>
 			<h1>Lifting dashboard</h1>
-			{data.map((text) => (
-				<ul>
-					{text.map((t) => (
-						<li>{t}</li>
-					))}
-				</ul>
-			))}
+			<section>
+				Sets over: {setsCounter}
+				<ExcersiseList excersises={excersiseToShow} reps={parsedReps} />
+			</section>
+			<button
+				onClick={() => {
+					setsCounter > 1
+						? setSetsCounter(setsCounter - 1)
+						: setSlideIndex((index) => index + 1);
+				}}
+			>
+				Next
+			</button>
 		</section>
 	);
 }
@@ -49,7 +76,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 const parseCSV = (data: string[]) => {
 	const firstLineIndex = data.findIndex((a) => a === "A");
 	const newData = data.slice(firstLineIndex);
-	const records: Record[] = [];
+	const records = [];
 
 	newData.map((text: string, index: number) => {
 		if (text === "A" || text === "B" || text === "C" || text === "D") {
