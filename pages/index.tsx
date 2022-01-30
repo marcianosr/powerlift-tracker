@@ -1,13 +1,21 @@
 import styles from "@/pages/index.module.css";
 import { GetServerSideProps } from "next";
 import { parse } from "papaparse";
-import { useEffect, useState } from "react";
-import ExcersiseList from "@/components/ExcersiseList";
+import ExcersiseList, { WeightRPE } from "@/components/ExcersiseList";
 import { parseCSV } from "util/parseCSV";
+import Layout from "@/components/Layout";
+
+type ExceriseInfoItems = {
+	excersise: string;
+	sets: string;
+	reps: string;
+	previousLifts: WeightRPE;
+};
 
 export default function Home({ data }) {
-	const dataToLift = data.map(
-		([excersise, sets, reps, ...lastTimeLifts]: [
+	const dataToLift: ExceriseInfoItems = data.map(
+		([excersise, sets, reps, ...previousLifts]: [
+			string,
 			string,
 			string,
 			string
@@ -15,47 +23,28 @@ export default function Home({ data }) {
 			excersise,
 			sets,
 			reps,
-			lastTimeLifts: {
-				lift: lastTimeLifts[lastTimeLifts.length - 1],
-				RPE: lastTimeLifts[lastTimeLifts.length - 2],
+			currentLifts: {
+				weight: previousLifts[previousLifts.length - 2],
+				RPE: previousLifts[previousLifts.length - 1],
+			},
+			previousLifts: {
+				weight: previousLifts[previousLifts.length - 3],
+				RPE: previousLifts[previousLifts.length - 4],
 			},
 		})
 	);
 
-	const [slideIndex, setSlideIndex] = useState(0);
-	const excersiseToShow = dataToLift.slice(slideIndex, slideIndex + 2);
-	const [currentExcersise] = excersiseToShow;
-	const amountOfSets = +currentExcersise.sets;
-	const [setsCounter, setSetsCounter] = useState(amountOfSets);
-
-	const parsedReps = currentExcersise.reps
-		.split(/x|<=|\s/)
-		.filter((text: string) => text !== "")[0];
-
-	useEffect(() => {
-		setSetsCounter(amountOfSets);
-	}, [amountOfSets, currentExcersise.excersise]);
+	console.log(data);
 
 	return (
-		<section>
-			<h1>Lifting dashboard</h1>
+		<Layout>
 			<section>
-				<ExcersiseList
-					excersises={excersiseToShow}
-					reps={parsedReps}
-					setsCounter={setsCounter}
-				/>
+				<h1>Lifting dashboard</h1>
+				<section>
+					<ExcersiseList dataToLift={dataToLift} />
+				</section>
 			</section>
-			<button
-				onClick={() => {
-					setsCounter > 1
-						? setSetsCounter(setsCounter - 1)
-						: setSlideIndex((index) => index + 1);
-				}}
-			>
-				Next
-			</button>
-		</section>
+		</Layout>
 	);
 }
 

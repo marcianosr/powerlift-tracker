@@ -12,7 +12,7 @@ export const parseCSV = (data: string[]) => {
 			records.push(
 				newData
 					.map((text) => text.trim())
-					.slice(1 + index, nextIndex + index - 2)
+					.slice(1 + index, nextIndex + index - 1)
 			);
 		}
 	});

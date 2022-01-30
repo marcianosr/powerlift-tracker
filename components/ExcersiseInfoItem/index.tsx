@@ -1,30 +1,40 @@
 import React, { FC } from "react";
-import { LastTimeLifts } from "../ExcersiseList";
+import { WeightRPE } from "../ExcersiseList";
+import styles from "./styles.module.css";
 
 type ExcersiseInfoItemProps = {
 	excersise: string;
 	sets: string;
 	reps: string;
-	lastTimeLifts: LastTimeLifts;
+	currentLifts: WeightRPE;
+	previousLifts: WeightRPE;
 };
 const ExcersiseInfoItem: FC<ExcersiseInfoItemProps> = ({
 	excersise,
 	sets,
 	reps,
-	lastTimeLifts,
+	currentLifts,
+	previousLifts,
 }) => {
 	return (
-		<li style={{ marginBottom: "2rem" }}>
-			<strong>Oefening</strong>
-			<div>{excersise}</div>
-			<strong>Sets</strong>
-			<div>{sets}</div>
-			<strong>Reps</strong>
-			<div>{reps}</div>
-			<strong>Last time</strong>
-			<div>
-				Gewicht: {lastTimeLifts.lift} - RPE: {lastTimeLifts.RPE}
-			</div>
+		<li className={styles.listItem}>
+			{/* <strong>Oefening</strong> */}
+			<h2 className={styles.headingText}>{excersise}</h2>
+			<section className={styles.setsRepsContainer}>
+				<strong>Sets</strong>
+				<div>{sets}</div>
+				<strong>Reps</strong>
+				<div>{reps}</div>
+				<strong>Weight</strong>
+				{currentLifts.weight} @ {currentLifts.RPE}
+			</section>
+
+			<section className={styles.smallText}>
+				<strong>Previous</strong>
+				<div>
+					Gewicht: {previousLifts.weight} - RPE: {previousLifts.RPE}
+				</div>
+			</section>
 		</li>
 	);
 };
