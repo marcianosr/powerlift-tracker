@@ -3,6 +3,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { parse } from "papaparse";
 import { useEffect, useState } from "react";
 import ExcersiseList from "@/components/ExcersiseList";
+import { parseCSV } from "util/parseCSV";
 
 export default function Home({ data }) {
 	const dataToLift = data.map(
@@ -71,26 +72,4 @@ export const getServerSideProps: GetServerSideProps = async ({
 			data: parseCSV(parsed),
 		},
 	};
-};
-
-const parseCSV = (data: string[]) => {
-	const firstLineIndex = data.findIndex((a) => a === "A");
-	const newData = data.slice(firstLineIndex);
-	const records = [];
-
-	newData.map((text: string, index: number) => {
-		if (text === "A" || text === "B" || text === "C" || text === "D") {
-			const nextIndex = newData
-				.slice(1)
-				.findIndex((element: string) => element === "A");
-
-			records.push(
-				newData
-					.map((text) => text.trim())
-					.slice(1 + index, nextIndex + index - 2)
-			);
-		}
-	});
-
-	return records;
 };
