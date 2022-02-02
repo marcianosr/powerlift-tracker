@@ -1,21 +1,55 @@
 export const parseCSV = (data: string[]) => {
-	const firstLineIndex = data.findIndex((a) => a === "A");
-	const newData = data.slice(firstLineIndex);
-	const records: string[][] = [];
+	const startIndex = data.findIndex((a) => a === "A");
+	const newData = data.slice(startIndex);
 
-	newData.map((text: string, index: number) => {
-		if (text === "A" || text === "B" || text === "C" || text === "D") {
-			const nextIndex = newData
-				.slice(1)
-				.findIndex((element: string) => element === "A");
+	const dayA = newData
+		.map((element: string, index: number) =>
+			sliceTrainingByDay(newData, element, index, "A")
+		)
+		.filter((item) => item !== undefined);
 
-			records.push(
-				newData
-					.map((text) => text.trim())
-					.slice(1 + index, nextIndex + index - 1)
-			);
-		}
-	});
+	const dayB = newData
+		.map((element: string, index: number) =>
+			sliceTrainingByDay(newData, element, index, "B")
+		)
+		.filter((item) => item !== undefined);
 
-	return records;
+	const dayC = newData
+		.map((element: string, index: number) =>
+			sliceTrainingByDay(newData, element, index, "C")
+		)
+		.filter((item) => item !== undefined);
+
+	const dayD = newData
+		.map((element: string, index: number) =>
+			sliceTrainingByDay(newData, element, index, "D")
+		)
+		.filter((item) => item !== undefined);
+
+	const result = { dayA, dayB, dayC, dayD };
+
+	return result;
+};
+
+const sliceTrainingByDay = (
+	data: string[],
+	element: string,
+	index: number,
+	char: string
+) => {
+	if (element === char) {
+		const records = [];
+
+		const startFrom = data
+			.slice(1)
+			.findIndex((element: string) => element === "A");
+
+		records.push(
+			data.map((text) => text.trim()).slice(1 + index, startFrom + index)
+		);
+
+		const result = records.flat();
+
+		return result;
+	}
 };
