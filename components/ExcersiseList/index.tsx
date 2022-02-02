@@ -44,7 +44,6 @@ const ExcersiseList: FC<ExcersiseListProps> = ({ dataToLift }) => {
 					idx: number
 				) => (
 					<Fragment key={idx}>
-						{idx === 0 && <h1>Sets over: {setsCounter}</h1>}
 						{idx === 1 && <h1>Up next</h1>}
 						<ExcersiseInfoItem
 							excersise={excersise}
@@ -52,6 +51,8 @@ const ExcersiseList: FC<ExcersiseListProps> = ({ dataToLift }) => {
 							reps={parsedReps}
 							currentLifts={currentLifts}
 							previousLifts={previousLifts}
+							idx={idx}
+							setsCounter={setsCounter}
 						/>
 						{idx === 0 && (
 							<button

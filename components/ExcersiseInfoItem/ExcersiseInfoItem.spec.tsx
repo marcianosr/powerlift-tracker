@@ -8,14 +8,15 @@ describe("ExcersiseInfoItem", () => {
 				excersise="Low bar squat"
 				sets="4"
 				reps="4"
-				lastTimeLifts={{ RPE: "10", lift: "300kg x 1" }}
+				idx={1}
+				setsCounter={2}
+				previousLifts={{ weight: "165kg x 3", RPE: "7" }}
+				currentLifts={{ weight: "175kg x 3", RPE: "7" }}
 			/>
 		);
 
-		getByText("Oefening");
 		getByText("Low bar squat");
-		getByText("Sets");
-		getByText("Reps");
-		getByText("Last time");
+		// getByText("175kg");
+		// getByText("Resultaat");
 	});
 });
