@@ -5,19 +5,7 @@ import { parseCSV } from "util/parseCSV";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import ExcersiseListItem from "@/components/ExcersiseListItem";
-
-type ExceriseInfoItems = {
-	excersise: string;
-	sets: string;
-	reps: string;
-	weight: string;
-	previousLifts: WeightRPE;
-};
-
-type WeightRPE = {
-	weight: string;
-	RPE: string;
-};
+import { ExceriseInfoItems } from "@/components/ExcersiseInfoItem/types";
 
 type TrainingPageProps = {
 	data: any;
@@ -27,7 +15,7 @@ const TrainingPage: NextPage<TrainingPageProps> = ({ data }) => {
 	const { query } = useRouter();
 
 	const excersisesInfo: ExceriseInfoItems[] = data.map(
-		([excersise, sets, reps, ...previousLifts]: [
+		([excersise, sets, reps, ...previous]: [
 			string,
 			string,
 			string,
@@ -36,11 +24,11 @@ const TrainingPage: NextPage<TrainingPageProps> = ({ data }) => {
 			excersise,
 			sets,
 			reps,
-			weight: previousLifts[previousLifts.length - 2],
-			RPE: previousLifts[previousLifts.length - 1],
-			previousLifts: {
-				weight: previousLifts[previousLifts.length - 4],
-				RPE: previousLifts[previousLifts.length - 3],
+			weight: previous[previous.length - 2],
+			RPE: previous[previous.length - 1],
+			previous: {
+				weight: previous[previous.length - 4],
+				RPE: previous[previous.length - 3],
 			},
 		})
 	);
