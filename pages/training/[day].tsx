@@ -5,7 +5,7 @@ import { parseCSV } from "util/parseCSV";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import ExcersiseListItem from "@/components/ExcersiseListItem";
-import { ExceriseInfoItems } from "@/components/ExcersiseInfoItem/types";
+import { ExceriseInfoItems } from "@/components/ExcersiseListItem/types";
 
 type TrainingPageProps = {
 	data: any;
@@ -24,7 +24,7 @@ const TrainingPage: NextPage<TrainingPageProps> = ({ data }) => {
 			excersise,
 			sets,
 			reps,
-			weight: previous[previous.length - 2],
+			weight: previous[previous.length - 2].split("x")[0],
 			RPE: previous[previous.length - 1],
 			previous: {
 				weight: previous[previous.length - 4],
@@ -36,9 +36,11 @@ const TrainingPage: NextPage<TrainingPageProps> = ({ data }) => {
 	return (
 		<Layout>
 			<h1>{query.day}</h1>
-			{excersisesInfo.map((item, idx) => (
-				<ExcersiseListItem item={item} idx={idx} key={idx} />
-			))}
+			<section className={styles.list}>
+				{excersisesInfo.map((item, idx) => (
+					<ExcersiseListItem item={item} idx={idx} key={idx} />
+				))}
+			</section>
 		</Layout>
 	);
 };
