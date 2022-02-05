@@ -35,12 +35,17 @@ const ExcersiseListItem: FC<ExcersiseListItemProps> = ({ item, idx }) => {
 	};
 	return (
 		<div className={styles.listContainer}>
+			<section className={styles.container}>
+				<span className={styles.secondaryText}>Tijd</span>
+				<span className={styles.secondaryText}>Oefening</span>
+				<span className={styles.secondaryText}>Sets</span>
+			</section>
 			<div className={styles.container}>
 				<section className={styles.sidebar}>
 					<span className={styles.smallText}>18:15</span>
 				</section>
 				<section>
-					{/* <div className={styles.excersise}>{item.excersise}</div> */}
+					<div className={styles.excersise}>{item.excersise}</div>
 					<span className={styles.innerContainer}>
 						<span className={styles.weight}>
 							{item.weight.split("kg")[0]}

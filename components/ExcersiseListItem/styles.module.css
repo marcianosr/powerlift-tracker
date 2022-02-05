@@ -3,7 +3,7 @@
 	font-style: italic;
 	font-weight: 800;
 	margin-right: 1rem;
-	/* letter-spacing: -1px; */
+	letter-spacing: -1px;
 }
 
 .kg {
@@ -15,13 +15,12 @@
 
 .x {
 	font-size: 1.25rem;
-	font-style: italic;
 	font-weight: 800;
 }
 
 .excersise {
-	font-size: 1rem;
-	font-weight: 500;
+	font-size: 0.75rem;
+	font-weight: 400;
 }
 
 .listContainer {
@@ -30,8 +29,21 @@
 
 .container {
 	display: grid;
-	grid-template-columns: 75px 1fr 50px;
+	grid-template-columns: 50px 1fr 50px;
 	column-gap: 1rem;
+}
+
+.container:first-child {
+	margin-bottom: 1rem;
+}
+
+/* Temporary */
+.container:first-child span:first-child {
+	margin-left: 0.75rem;
+}
+
+.container:first-child span:last-child {
+	margin-left: 0.75rem;
 }
 
 .innerContainer {
@@ -47,8 +59,6 @@
 	border-right: 2px solid white;
 }
 
-.setsReps {
-}
 .amountSets {
 	align-items: center;
 	display: flex;
@@ -58,6 +68,7 @@
 
 .setsNumber {
 	font-size: 1.5rem;
+	font-weight: 800;
 }
 
 .smallText {
@@ -66,4 +77,11 @@
 
 .semiBigText {
 	font-size: 1.5rem;
+	font-weight: 800;
+}
+
+.secondaryText {
+	color: #b3b3b3;
+	font-weight: 600;
+	font-size: 0.75rem;
 }
