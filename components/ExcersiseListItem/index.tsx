@@ -1,6 +1,6 @@
 import classnames from "classnames";
 import React, { ChangeEvent, FC, useState } from "react";
-import { ExceriseInfoItems } from "../ExcersiseInfoItem/types";
+import { ExceriseInfoItems } from "./types";
 import styles from "./styles.module.css";
 
 type ExcersiseListItemProps = {
@@ -14,7 +14,11 @@ const ExcersiseListItem: FC<ExcersiseListItemProps> = ({ item, idx }) => {
 		done: false,
 	});
 
-	const isDoneStyles = classnames({
+	const parsedReps = item.reps
+		.split(/x|<=|\s/)
+		.filter((text: string) => text !== "")[0];
+
+	const isDoneStyles = classnames(styles.label, {
 		[styles.strike]: todo.done,
 	});
 
@@ -30,22 +34,33 @@ const ExcersiseListItem: FC<ExcersiseListItemProps> = ({ item, idx }) => {
 		}
 	};
 	return (
-		<div className={styles.inputContainer}>
-			<input
-				type="checkbox"
-				value={item.excersise}
-				id={item.excersise}
-				name={item.excersise}
-				onChange={onDone}
-			/>
-			<label htmlFor={item.excersise} className={isDoneStyles}>
-				<strong>{item.excersise}</strong>
-				<div>
-					<span>{item.sets}</span>
-					<span>{item.reps}</span>
-					<span>{item.weight}</span>
-				</div>
-			</label>
+		<div className={styles.listContainer}>
+			<div className={styles.container}>
+				<section className={styles.sidebar}>
+					<span className={styles.smallText}>18:15</span>
+				</section>
+				<section>
+					{/* <div className={styles.excersise}>{item.excersise}</div> */}
+					<span className={styles.innerContainer}>
+						<span className={styles.weight}>
+							{item.weight.split("kg")[0]}
+							<span className={styles.kg}>kg</span>
+						</span>
+						<div className={styles.setsReps}>
+							<span className={styles.semiBigText}>
+								{item.sets}
+							</span>
+							<span className={styles.x}>x</span>
+							<span className={styles.semiBigText}>
+								{parsedReps}
+							</span>
+						</div>
+					</span>
+				</section>
+				<section className={styles.amountSets}>
+					<span className={styles.setsNumber}>1</span>
+				</section>
+			</div>
 		</div>
 	);
 };
