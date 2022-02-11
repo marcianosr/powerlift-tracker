@@ -28,7 +28,7 @@ main {
 	align-items: center; */
 
 	color: #fff;
-	/* padding: 2rem 1rem; */
+	padding: 2rem 1rem;
 }
 
 footer {
@@ -53,4 +53,8 @@ footer a {
 a {
 	color: inherit;
 	text-decoration: none;
+}
+
+h1 {
+	margin-top: 0;
 }
