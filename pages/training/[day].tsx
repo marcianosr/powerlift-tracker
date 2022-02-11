@@ -24,8 +24,8 @@ const TrainingPage: NextPage<TrainingPageProps> = ({ data }) => {
 			excersise,
 			sets,
 			reps,
-			weight: previous[previous.length - 2].split("x")[0],
-			RPE: previous[previous.length - 1],
+			weight: previous[previous.length - 3].split("x")[0],
+			RPE: previous[previous.length - 2],
 			previous: {
 				weight: previous[previous.length - 4],
 				RPE: previous[previous.length - 3],
