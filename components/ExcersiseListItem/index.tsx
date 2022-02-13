@@ -9,11 +9,6 @@ type ExcersiseListItemProps = {
 };
 
 const ExcersiseListItem: FC<ExcersiseListItemProps> = ({ item, idx }) => {
-	const [todo, setTodo] = useState({
-		...item,
-		done: false,
-	});
-
 	const parsedReps = item.reps
 		.split(/x|<=|\s/)
 		.filter((text: string) => text !== "")[0];
