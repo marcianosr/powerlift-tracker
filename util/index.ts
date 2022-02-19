@@ -2,9 +2,8 @@ import { GoogleSpreadsheetWorksheet } from "google-spreadsheet";
 import range from "lodash.range";
 
 // ? Training actually starts in column "F"
-const START_ROW_OFFSET = 4;
+export const START_ROW_OFFSET = 4;
 const START_COLUMN_OFFSET = 5;
-const WEEK_OFFSET = 2;
 
 export const getExcelColumnByWeek = (givenIndex: number) => {
 	let weekIndexes = [givenIndex];
@@ -50,9 +49,14 @@ export const getExcelColumnByWeek = (givenIndex: number) => {
 	return [lettersArr[givenIndex], lettersArr[givenIndex + 1]];
 };
 
-export const setColumnOffsetByWeek = (start: number, offset?: number) => {
-	if (!offset) return start + START_ROW_OFFSET;
-	return start + offset + START_ROW_OFFSET;
+export const generateIndexForColumn = (current: number) => {
+	if (current === 1) return 1;
+	let sum = 0;
+
+	for (let i = 1; i < current; i++) {
+		sum = current + i;
+	}
+	return sum;
 };
 
 export const loadColumnDataByLetter = async (
@@ -67,7 +71,7 @@ export const loadColumnDataByLetter = async (
 	const startWeekIndex = +weekIndexFromQuery || 0;
 
 	const excelColumnForWeek = getExcelColumnByWeek(
-		setColumnOffsetByWeek(startWeekIndex, WEEK_OFFSET)
+		generateIndexForColumn(startWeekIndex) + START_ROW_OFFSET
 	);
 
 	await sheet.loadCells(
@@ -88,7 +92,7 @@ export const loadColumnDataByLetter = async (
 
 			if (!firstColumn || !secondColumn) return;
 
-			const result =
+			const parsedExcelData =
 				typeof firstColumn === "string" &&
 				(typeof secondColumn === "string" ||
 					typeof secondColumn === "number")
@@ -98,7 +102,11 @@ export const loadColumnDataByLetter = async (
 							.concat(secondColumn.toString())
 					: [];
 
+			const result = parsedExcelData.filter(Boolean);
+
 			const [weight, reps, RPE] = result;
+
+			console.log("r", result);
 
 			return {
 				day: sheet.getCellByA1(`A${idx}`).value,
