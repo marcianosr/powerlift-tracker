@@ -12,7 +12,7 @@ type TrainingPageProps = {
 };
 
 const TrainingPage: NextPage<TrainingPageProps> = ({ data }) => {
-	// console.log(data);
+	console.log(data);
 	return <h1>Powerlift</h1>;
 	const { query } = useRouter();
 
@@ -80,17 +80,15 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	const excersiseData = await getBasicProgramInfo(sheet);
 	const programData = await loadColumnDataByLetter(sheet, weekIndexFromQuery);
 
-	// console.log("cur", programData);
-
 	const dayQuery = params?.day as SlugKeys;
 	const slug = DAY_KEYS_BY_ROUTE_MAPPING[dayQuery];
 
 	const programExcersises = excersiseData.filter((item) => item.day === slug);
-	// const currentProgram = programData.filter((item) => item.day === slug);
+	const currentProgram = programData.filter((item) => item?.day === slug);
 
 	const data = {
 		programExcersises,
-		// currentProgram,
+		currentProgram,
 	};
 	return { props: { data } };
 };
