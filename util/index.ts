@@ -104,8 +104,6 @@ export const loadColumnDataByLetter = async (
 
 			const result = parsedExcelData.filter(Boolean);
 
-			console.log("r", result);
-
 			return {
 				day: sheet.getCellByA1(`A${idx}`).value,
 				weight: result[0],
