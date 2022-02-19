@@ -104,15 +104,13 @@ export const loadColumnDataByLetter = async (
 
 			const result = parsedExcelData.filter(Boolean);
 
-			const [weight, reps, RPE] = result;
-
 			console.log("r", result);
 
 			return {
 				day: sheet.getCellByA1(`A${idx}`).value,
-				weight,
-				reps: reps.split(","),
-				RPE,
+				weight: result[0],
+				reps: result[1].split(","),
+				RPE: result[result.length - 1],
 			};
 		})
 		.filter(Boolean);
