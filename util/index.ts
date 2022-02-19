@@ -78,19 +78,36 @@ export const loadColumnDataByLetter = async (
 
 	return rowIndexes
 		.map((idx) => {
-			const columnValue = sheet.getCellByA1(
+			const firstColumn = sheet.getCellByA1(
 				`${excelColumnForWeek[0]}${idx}`
 			).value;
+
+			const secondColumn = sheet.getCellByA1(
+				`${excelColumnForWeek[1]}${idx}`
+			).value;
+
+			if (!firstColumn || !secondColumn) return;
+
 			const result =
-				typeof columnValue === "string" &&
-				columnValue.split(/x/).map((text) => text.trim());
+				typeof firstColumn === "string" &&
+				(typeof secondColumn === "string" ||
+					typeof secondColumn === "number")
+					? firstColumn
+							.split(/x/)
+							.map((text) => text.trim())
+							.concat(secondColumn.toString())
+					: [];
+
+			const [weight, reps, RPE] = result;
 
 			return {
 				day: sheet.getCellByA1(`A${idx}`).value,
-				result,
+				weight,
+				reps: reps.split(","),
+				RPE,
 			};
 		})
-		.filter((item) => item.result); // ? Watch out with null values. When everything is null, we want to return a 404 or something. But be aware that there are always null values in between.
+		.filter(Boolean);
 };
 
 export const getBasicProgramInfo = async (
