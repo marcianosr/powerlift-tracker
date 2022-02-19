@@ -1,15 +1,18 @@
 import { GoogleSpreadsheetWorksheet } from "google-spreadsheet";
 import range from "lodash.range";
 
-const START_OFFSET = 5;
+// ? Training actually starts in column "F"
+const START_ROW_OFFSET = 4;
+const START_COLUMN_OFFSET = 5;
+const WEEK_OFFSET = 2;
 
-export const getExcelColumnLetterForIndex = (givenIndex: number) => {
+export const getExcelColumnByWeek = (givenIndex: number) => {
 	let weekIndexes = [givenIndex];
 
 	const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	const lettersArr = letters.split("");
 
-	// Refactor later?
+	// TODO: Refactor later
 	if (givenIndex === lettersArr.length - 1) {
 		return [lettersArr[givenIndex], "AA"];
 	}
@@ -47,31 +50,47 @@ export const getExcelColumnLetterForIndex = (givenIndex: number) => {
 	return [lettersArr[givenIndex], lettersArr[givenIndex + 1]];
 };
 
-export const getColumnByLetter = async (
+export const setColumnOffsetByWeek = (start: number, offset?: number) => {
+	if (!offset) return start + START_ROW_OFFSET;
+	return start + offset + START_ROW_OFFSET;
+};
+
+export const loadColumnDataByLetter = async (
 	sheet: GoogleSpreadsheetWorksheet,
-	letter: string | undefined | string[]
+	weekIndexFromQuery: string | string[] | undefined
 ) => {
 	const totalRowLength = (await sheet.getRows()).length;
-	const queryLetter = letter?.toString().toUpperCase();
 
-	await sheet.loadCells(
-		`${queryLetter}${START_OFFSET}:${queryLetter}${totalRowLength}`
+	if (!weekIndexFromQuery)
+		throw new Error("Week index is not given or found");
+
+	const startWeekIndex = +weekIndexFromQuery || 0;
+
+	const excelColumnForWeek = getExcelColumnByWeek(
+		setColumnOffsetByWeek(startWeekIndex, WEEK_OFFSET)
 	);
 
-	const rowIndexes = range(START_OFFSET, totalRowLength);
+	await sheet.loadCells(
+		`${excelColumnForWeek[0]}${START_COLUMN_OFFSET}:${excelColumnForWeek[1]}${totalRowLength}`
+	);
+
+	const rowIndexes = range(START_COLUMN_OFFSET, totalRowLength + 1); // ? Somehow needed to add + 1 because it ended at 32 iso 33?
 
 	return rowIndexes
 		.map((idx) => {
-			const columnValue = sheet.getCellByA1(`${queryLetter}${idx}`).value;
+			const columnValue = sheet.getCellByA1(
+				`${excelColumnForWeek[0]}${idx}`
+			).value;
 			const result =
 				typeof columnValue === "string" &&
 				columnValue.split(/x/).map((text) => text.trim());
 
 			return {
-				data: result,
+				day: sheet.getCellByA1(`A${idx}`).value,
+				result,
 			};
 		})
-		.filter((item) => item.data);
+		.filter((item) => item.result); // ? Watch out with null values. When everything is null, we want to return a 404 or something. But be aware that there are always null values in between.
 };
 
 export const getBasicProgramInfo = async (
@@ -79,9 +98,9 @@ export const getBasicProgramInfo = async (
 ) => {
 	const totalRowLength = (await sheet.getRows()).length;
 
-	await sheet.loadCells(`A${START_OFFSET}:D${totalRowLength}`);
+	await sheet.loadCells(`A${START_ROW_OFFSET}:D${totalRowLength}`);
 
-	const rowIndexes = range(START_OFFSET, totalRowLength);
+	const rowIndexes = range(START_ROW_OFFSET, totalRowLength);
 
 	return rowIndexes.map((idx) => ({
 		day: sheet.getCellByA1(`A${idx}`).value,
