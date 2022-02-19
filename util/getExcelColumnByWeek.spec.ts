@@ -1,4 +1,8 @@
-import { getExcelColumnByWeek, setColumnOffsetByWeek } from "./index";
+import {
+	getExcelColumnByWeek,
+	generateIndexForColumn,
+	START_ROW_OFFSET,
+} from "./index";
 
 const mapping = [
 	{
@@ -65,29 +69,29 @@ test.each(mapping)(
 	}
 );
 
-test("it should skip index based on the given index", () => {
-	expect(getExcelColumnByWeek(setColumnOffsetByWeek(1, 2))).toEqual([
-		"H",
-		"I",
-	]);
-	expect(getExcelColumnByWeek(setColumnOffsetByWeek(5, 3))).toEqual([
-		"M",
-		"N",
-	]);
-	expect(getExcelColumnByWeek(setColumnOffsetByWeek(20, 1))).toEqual([
-		"Z",
-		"AA",
-	]);
-	expect(getExcelColumnByWeek(setColumnOffsetByWeek(25, 3))).toEqual([
-		"AG",
-		"AH",
-	]);
+test("generateIndexForColumn", () => {
+	expect(generateIndexForColumn(1)).toBe(1);
+	expect(generateIndexForColumn(2)).toBe(3);
+	expect(generateIndexForColumn(3)).toBe(5);
+	expect(generateIndexForColumn(4)).toBe(7);
+	expect(generateIndexForColumn(5)).toBe(9);
+	expect(generateIndexForColumn(6)).toBe(11);
+	expect(generateIndexForColumn(7)).toBe(13);
+	expect(generateIndexForColumn(8)).toBe(15);
+	expect(generateIndexForColumn(9)).toBe(17);
 });
 
-test("it should start at the 5th letter when no offset is given and the staring point is the first week", () => {
-	expect(getExcelColumnByWeek(setColumnOffsetByWeek(1))).toEqual(["F", "G"]);
-});
-test("it should not skip index if no index is given", () => {
-	expect(getExcelColumnByWeek(setColumnOffsetByWeek(1))).toEqual(["F", "G"]);
-	expect(getExcelColumnByWeek(setColumnOffsetByWeek(2))).toEqual(["G", "H"]);
+test("each column letter based on week index", () => {
+	expect(
+		getExcelColumnByWeek(generateIndexForColumn(1) + START_ROW_OFFSET)
+	).toEqual(["F", "G"]);
+	expect(
+		getExcelColumnByWeek(generateIndexForColumn(2) + START_ROW_OFFSET)
+	).toEqual(["H", "I"]);
+	expect(
+		getExcelColumnByWeek(generateIndexForColumn(3) + START_ROW_OFFSET)
+	).toEqual(["J", "K"]);
+	expect(
+		getExcelColumnByWeek(generateIndexForColumn(4) + START_ROW_OFFSET)
+	).toEqual(["L", "M"]);
 });
