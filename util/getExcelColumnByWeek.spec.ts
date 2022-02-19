@@ -67,24 +67,24 @@ test.each(mapping)(
 
 test("it should skip index based on the given index", () => {
 	expect(getExcelColumnByWeek(setColumnOffsetByWeek(1, 2))).toEqual([
-		"D",
-		"E",
+		"H",
+		"I",
 	]);
 	expect(getExcelColumnByWeek(setColumnOffsetByWeek(5, 3))).toEqual([
-		"I",
-		"J",
+		"M",
+		"N",
 	]);
-	expect(getExcelColumnByWeek(setColumnOffsetByWeek(24, 1))).toEqual([
+	expect(getExcelColumnByWeek(setColumnOffsetByWeek(20, 1))).toEqual([
 		"Z",
 		"AA",
 	]);
 	expect(getExcelColumnByWeek(setColumnOffsetByWeek(25, 3))).toEqual([
-		"AC",
-		"AD",
+		"AG",
+		"AH",
 	]);
 });
 
-test("it should start at the 5th letter when no offset is given", () => {
+test("it should start at the 5th letter when no offset is given and the staring point is the first week", () => {
 	expect(getExcelColumnByWeek(setColumnOffsetByWeek(1))).toEqual(["F", "G"]);
 });
 test("it should not skip index if no index is given", () => {
