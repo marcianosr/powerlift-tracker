@@ -2,8 +2,6 @@ import styles from "@/pages/index.module.css";
 import { GetServerSideProps, NextPage } from "next";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
-import ExcersiseListItem from "@/components/ExcersiseListItem";
-import { ExceriseInfoItems } from "@/components/ExcersiseListItem/types";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { getBasicProgramInfo, loadColumnDataByLetter } from "../../../util";
 
@@ -13,36 +11,11 @@ type TrainingPageProps = {
 
 const TrainingPage: NextPage<TrainingPageProps> = ({ data }) => {
 	console.log(data);
-	return <h1>Powerlift</h1>;
 	const { query } = useRouter();
-
-	const excersisesInfo: ExceriseInfoItems[] = data.map(
-		([excersise, sets, reps, ...previous]: [
-			string,
-			string,
-			string,
-			string
-		]) => ({
-			excersise,
-			sets,
-			reps,
-			weight: previous[previous.length - 3].split("x")[0],
-			RPE: previous[previous.length - 2],
-			previous: {
-				weight: previous[previous.length - 4],
-				RPE: previous[previous.length - 3],
-			},
-		})
-	);
 
 	return (
 		<Layout>
 			<h1>{query.day}</h1>
-			<section className={styles.list}>
-				{excersisesInfo.map((item, idx) => (
-					<ExcersiseListItem item={item} idx={idx} key={idx} />
-				))}
-			</section>
 		</Layout>
 	);
 };
