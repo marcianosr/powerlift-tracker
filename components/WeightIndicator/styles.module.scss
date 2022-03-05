@@ -1,0 +1,38 @@
+.weightIndicator {
+	display: flex;
+	align-items: center;
+	gap: 0.5px;
+}
+
+.plate {
+	width: 4px;
+	height: 40px;
+}
+
+.red {
+	background-color: red;
+}
+
+.blue {
+	background-color: #006dd2;
+}
+
+.yellow {
+	background-color: yellow;
+	height: 28px;
+}
+
+.green {
+	background-color: green;
+	height: 22px;
+}
+
+.white {
+	background-color: white;
+	height: 16px;
+}
+
+.black {
+	background-color: black;
+	height: 11px;
+}
