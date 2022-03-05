@@ -1,0 +1,17 @@
+.previousContainer {
+	display: flex;
+	gap: 0.25rem;
+	flex-direction: column;
+	padding: 0 1.25rem;
+
+	> span:first-child {
+		font-size: 0.75rem;
+		color: var(--gray-30);
+	}
+
+	> span:last-child {
+		color: white;
+		font-size: 1rem;
+		text-transform: lowercase;
+	}
+}
