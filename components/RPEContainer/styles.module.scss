@@ -1,0 +1,19 @@
+.emptyRPEContainer {
+	--borderColor: #b8b8b8;
+
+	width: 35px;
+	height: 35px;
+	border: 1px dashed var(--borderColor);
+	border-radius: 10px;
+}
+
+.RPEContainer {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+
+	span:first-child {
+		font-size: 1rem;
+		font-weight: 800;
+	}
+}
