@@ -1,0 +1,36 @@
+.button {
+	--background: var(--gray-90);
+
+	background-color: var(--background);
+	border-radius: 30px;
+	padding: 0.6rem;
+	border: 0;
+
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	min-width: 115px;
+	min-height: 42px;
+	text-align: left;
+	// transition: transform 200ms;
+	user-select: none;
+}
+
+.button:active {
+	transform: scale(0.95);
+	/* ? Animation not working nicely on safari browsers, ask Roel!   */
+}
+
+.text {
+	text-transform: uppercase;
+	color: white;
+	font-size: 0.625rem;
+	font-weight: 800;
+	font-family: "Montserrat";
+	flex: 1;
+	display: block;
+}
+
+.large {
+	height: 60px;
+}
