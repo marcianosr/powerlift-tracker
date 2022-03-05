@@ -1,0 +1,30 @@
+.title {
+	margin: 0;
+	text-transform: uppercase;
+	font-weight: 800;
+	color: var(--color);
+}
+
+.large {
+	font-size: 2.5rem;
+}
+
+.small {
+	font-size: 1.125rem;
+}
+
+.x-small {
+	font-size: 1rem;
+}
+
+.xx-small {
+	font-size: 0.875rem;
+}
+
+.light {
+	--color: white;
+}
+
+.darker {
+	--color: var(--gray-50);
+}
