@@ -1,0 +1,8 @@
+.card {
+	--background: var(--gray-90);
+
+	background-color: var(--background);
+	border-radius: 20px;
+	padding: 1rem;
+	gap: 0.6rem;
+}
