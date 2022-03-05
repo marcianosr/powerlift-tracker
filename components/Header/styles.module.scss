@@ -1,0 +1,15 @@
+.header {
+	padding: 1rem;
+	padding-left: 0;
+	display: flex;
+	border-bottom: 1px solid var(--gray-90);
+
+	svg {
+		transform: rotate(180deg);
+	}
+
+	h1 {
+		flex: 1;
+		text-align: center;
+	}
+}
