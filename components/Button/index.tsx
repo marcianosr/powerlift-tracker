@@ -6,16 +6,19 @@ type ButtonProps = {
 	iconLeft?: ReactElement;
 	iconRight?: ReactElement;
 	variant?: "large";
+	onClick?: () => void;
 };
 
 const Button: FC<ButtonProps> = ({
 	variant,
 	iconLeft,
 	iconRight,
+	onClick,
 	children,
 }) => {
 	return (
 		<button
+			onClick={onClick}
 			role="button"
 			className={classNames(styles.button, styles[variant])}
 		>
