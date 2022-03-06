@@ -11,6 +11,11 @@ enum Plates {
 	Silver = 0.5,
 }
 
+export enum Bars {
+	Olympic = 20,
+	EZ = 10,
+}
+
 export const divideWeightForPlates = (
 	weight: number,
 	weights: PlateNumbers[] = []

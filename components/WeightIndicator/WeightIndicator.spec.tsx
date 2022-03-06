@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import WeightIndicator from ".";
 import { divideWeightForPlates } from "./utils";
 
-// ! Tip: Weights are WITHOUT bar!! ⚠️
+// ! Tip: Weights are WITH bar!! ⚠️
 const mockData = [
 	{
 		weight: 190,
