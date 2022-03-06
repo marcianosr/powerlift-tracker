@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import RPEContainer from ".";
 
 test("it shows an empty RPE when no RPE is given", () => {
-	render(<RPEContainer />);
+	render(<RPEContainer RPE={0} />);
 	screen.getByTestId("empty-rpe");
 });
 
