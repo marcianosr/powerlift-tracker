@@ -104,9 +104,13 @@ export const loadColumnDataByLetter = async (
 
 			const result = parsedExcelData.filter(Boolean);
 
+			const weight = result[0].split("kg")[0];
+			const hasKGUnit = result[0].includes("kg");
 			return {
+				id: `${sheet.getCellByA1(`A${idx}`).value}${idx}`,
 				day: sheet.getCellByA1(`A${idx}`).value,
-				weight: result[0],
+				weight: +weight,
+				...(hasKGUnit ? { unit: "kg" } : { unit: "unknown" }),
 				reps: result[1].split(","),
 				RPE: result[result.length - 1],
 			};
@@ -124,8 +128,9 @@ export const getBasicProgramInfo = async (
 	const rowIndexes = range(START_ROW_OFFSET, totalRowLength);
 
 	return rowIndexes.map((idx) => ({
+		id: `${sheet.getCellByA1(`A${idx}`).value}${idx}`,
 		day: sheet.getCellByA1(`A${idx}`).value,
-		excersise: sheet.getCellByA1(`B${idx}`).value,
+		exercise: sheet.getCellByA1(`B${idx}`).value,
 		sets: sheet.getCellByA1(`C${idx}`).value,
 		reps: sheet.getCellByA1(`D${idx}`).value,
 	}));
