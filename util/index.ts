@@ -1,5 +1,6 @@
 import { GoogleSpreadsheetWorksheet } from "google-spreadsheet";
 import range from "lodash.range";
+import { exerciseForType } from "./exerciseForType";
 
 // ? Training actually starts in column "F"
 export const START_ROW_OFFSET = 4;
@@ -106,10 +107,11 @@ export const loadColumnDataByLetter = async (
 
 			const weight = result[0].split("kg")[0];
 			const hasKGUnit = result[0].includes("kg");
+
 			return {
 				id: `${sheet.getCellByA1(`A${idx}`).value}${idx}`,
 				day: sheet.getCellByA1(`A${idx}`).value,
-				weight: +weight,
+				weight: +weight || result[0], // ! kg weights or "BW" or "Stand .."
 				...(hasKGUnit ? { unit: "kg" } : { unit: "unknown" }),
 				reps: result[1].split(","),
 				RPE: result[result.length - 1],
@@ -127,11 +129,17 @@ export const getBasicProgramInfo = async (
 
 	const rowIndexes = range(START_ROW_OFFSET, totalRowLength);
 
-	return rowIndexes.map((idx) => ({
-		id: `${sheet.getCellByA1(`A${idx}`).value}${idx}`,
-		day: sheet.getCellByA1(`A${idx}`).value,
-		exercise: sheet.getCellByA1(`B${idx}`).value,
-		sets: sheet.getCellByA1(`C${idx}`).value,
-		reps: sheet.getCellByA1(`D${idx}`).value,
-	}));
+	return rowIndexes.map((idx) => {
+		return {
+			id: `${sheet.getCellByA1(`A${idx}`).value}${idx}`,
+			day: sheet.getCellByA1(`A${idx}`).value,
+			exercise: sheet.getCellByA1(`B${idx}`).value,
+			sets: sheet.getCellByA1(`C${idx}`).value,
+			reps: sheet.getCellByA1(`D${idx}`).value,
+			type: !sheet.getCellByA1(`B${idx}`).value
+				? ""
+				: exerciseForType(sheet.getCellByA1(`B${idx}`).value.toString())
+						.type, // ! Can be any type from the excel, however strings are the only ones needed. Not to be confused with "type" from exercise
+		};
+	});
 };
