@@ -14,11 +14,14 @@ interface FontSize extends CSSProperties {
 
 const WeightLine: FC<WeightLineProps> = ({ weight, reps }) => {
 	const size = reps.toString().length < 4 ? 2.5 : 2;
+	console.log(weight);
 
 	return (
 		<div className={styles.weightContainer}>
 			<span className={styles.weight}>{weight}</span>
-			<span className={styles.kg}>kg</span>{" "}
+			{typeof weight === "number" && (
+				<span className={styles.kg}>kg</span>
+			)}{" "}
 			<span className={styles.x}>x</span>{" "}
 			<span
 				className={styles.reps}
