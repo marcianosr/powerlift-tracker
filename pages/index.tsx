@@ -1,4 +1,4 @@
-import styles from "@/pages/index.module.css";
+import styles from "@/pages/index.module.scss";
 import Layout from "@/components/Layout";
 import Link from "next/link";
 

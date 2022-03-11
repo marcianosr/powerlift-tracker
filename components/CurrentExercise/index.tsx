@@ -28,6 +28,7 @@ type CurrentExerciseProps = {
 			reps: string[];
 			RPE: number;
 		};
+		type: "barbell" | "machine" | "dumbell";
 	}[];
 };
 
@@ -69,6 +70,8 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 		}
 	};
 
+	console.log(data);
+
 	return (
 		<section className={styles.container}>
 			<Title shade="light" variant="x-small">
@@ -83,11 +86,14 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 						<span className={styles.subTitle}>
 							Set {currentSet.count}
 						</span>
-						<WeightIndicator
-							weights={divideWeightForPlates(
-								exercises.current.result.weight - Bars.Olympic
-							)}
-						/>
+						{exercises.current.type === "barbell" && (
+							<WeightIndicator
+								weights={divideWeightForPlates(
+									exercises.current.result.weight -
+										Bars.Olympic
+								)}
+							/>
+						)}
 						<WeightLine
 							weight={exercises.current.result.weight}
 							reps={exercises.current.reps}

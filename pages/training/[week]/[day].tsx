@@ -4,18 +4,20 @@ import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { getBasicProgramInfo, loadColumnDataByLetter } from "../../../util";
+import CurrentExercise from "@/components/CurrentExercise";
+import Header from "@/components/Header";
 
 type TrainingPageProps = {
 	data: any;
 };
 
 const TrainingPage: NextPage<TrainingPageProps> = ({ data }) => {
-	console.log(data);
 	const { query } = useRouter();
 
 	return (
 		<Layout>
-			<h1>{query.day}</h1>
+			<Header pageTitle={query.day} />
+			<CurrentExercise data={data} />
 		</Layout>
 	);
 };
@@ -48,21 +50,24 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	});
 
 	await doc.loadInfo();
-	const sheet = doc.sheetsByIndex[0];
+	const sheet = doc.sheetsByIndex[0]; // ? improve: get training by tab name
 	const weekIndexFromQuery = params?.week || "";
 	const excersiseData = await getBasicProgramInfo(sheet);
+
 	const programData = await loadColumnDataByLetter(sheet, weekIndexFromQuery);
 
 	const dayQuery = params?.day as SlugKeys;
 	const slug = DAY_KEYS_BY_ROUTE_MAPPING[dayQuery];
 
 	const programExcersises = excersiseData.filter((item) => item.day === slug);
-	const currentProgram = programData.filter((item) => item?.day === slug);
+	const programResult = programData.filter((item) => item?.day === slug);
 
-	const data = {
-		programExcersises,
-		currentProgram,
-	};
+	const data = programExcersises.map((data) => {
+		const match = programResult.find((t) => t?.id === data.id);
+
+		return { ...data, result: match };
+	});
+
 	return { props: { data } };
 };
 
