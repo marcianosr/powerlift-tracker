@@ -38,9 +38,10 @@ export const exerciseTypeMapping: ExerciseTypeMapping[] = [
 export const exerciseForType = (exercise: string) => {
 	const cleanExerciseName = exercise.toLocaleLowerCase();
 
-	const type = exerciseTypeMapping.find((item) =>
-		item.matches.find((name) => cleanExerciseName.match(name))
-	)?.type;
+	const type =
+		exerciseTypeMapping.find((item) =>
+			item.matches.find((name) => cleanExerciseName.match(name))
+		)?.type || "no-type";
 
 	return { type, exercise };
 };

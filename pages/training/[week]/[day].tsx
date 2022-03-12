@@ -65,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	const data = programExcersises.map((data) => {
 		const match = programResult.find((t) => t?.id === data.id);
 
-		return { ...data, result: match };
+		return { ...data, result: match || null };
 	});
 
 	return { props: { data } };
