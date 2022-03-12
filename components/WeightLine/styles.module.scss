@@ -13,3 +13,16 @@
 .reps {
 	font-size: var(--textLength);
 }
+
+.long {
+	display: flex;
+
+	&.weightContainer {
+		font-size: 1rem;
+		align-items: center;
+	}
+
+	.reps {
+		white-space: nowrap;
+	}
+}
