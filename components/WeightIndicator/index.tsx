@@ -10,9 +10,18 @@ type PlateProps = {
 	weight: PlateNumbers;
 };
 
-export type PlateNumbers = 25 | 20 | 15 | 10 | 5 | 2.5 | 1.25;
+export type PlateNumbers = 25 | 20 | 15 | 10 | 5 | 2.5 | 1.25 | 0.5;
 
-type Plates = "red" | "blue" | "yellow" | "green" | "white" | "black" | "gray";
+type Plates =
+	| "red"
+	| "blue"
+	| "yellow"
+	| "green"
+	| "white"
+	| "black"
+	| "gray"
+	| "silver";
+
 type PlateMapping = {
 	[key in PlateNumbers]: Plates;
 };
@@ -25,6 +34,7 @@ const PLATE_MAPPING: PlateMapping = {
 	5: "white",
 	2.5: "black",
 	1.25: "gray",
+	0.5: "silver",
 };
 
 const WeightIndicator: FC<WeightIndicatorProps> = ({ weights }) => {
