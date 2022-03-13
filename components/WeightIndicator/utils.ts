@@ -30,7 +30,9 @@ export const divideWeightForPlates = (
 			(!isMultipleOfTen && Math.floor(weight / 10) * 10) || 0;
 
 		if (nearestTen === 0)
-			return [...weights, weight / 2].sort() as PlateNumbers[];
+			return [...weights, weight / 2].sort(
+				(a, b) => a - b
+			) as PlateNumbers[];
 
 		const belowTen = weight - nearestTen;
 
@@ -42,11 +44,9 @@ export const divideWeightForPlates = (
 				belowTen / 3 / 2, // 1.25
 			].sort((a, b) => a - b) as PlateNumbers[]; // Compare func. is required: https://www.w3schools.com/jsref/jsref_sort.asp
 
-		return [
-			...weights,
-			weight / 2 - belowTen / 2,
-			belowTen / 2,
-		].sort() as PlateNumbers[];
+		return [...weights, weight / 2 - belowTen / 2, belowTen / 2].sort(
+			(a, b) => a - b
+		) as PlateNumbers[];
 	}
 
 	return divideWeightForPlates(weight - redPlatesTimesTwo, [
