@@ -5,7 +5,8 @@ import styles from "./styles.module.scss";
 type ButtonProps = {
 	iconLeft?: ReactElement;
 	iconRight?: ReactElement;
-	variant?: "large";
+	variant?: "large" | "smallRound";
+	align?: "left" | "right";
 	onClick?: () => void;
 };
 
@@ -14,13 +15,16 @@ const Button: FC<ButtonProps> = ({
 	iconLeft,
 	iconRight,
 	onClick,
+	align = "left",
 	children,
 }) => {
 	return (
 		<button
 			onClick={onClick}
 			role="button"
-			className={classNames(styles.button, styles[variant])}
+			className={classNames(styles.button, styles[variant], {
+				[styles.alignRight]: align === "right",
+			})}
 		>
 			{iconLeft && iconLeft}
 			<span className={styles.text}>{children}</span>

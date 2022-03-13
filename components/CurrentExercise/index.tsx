@@ -104,16 +104,6 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 			</Card>
 			<section className={styles.actionsContainer}>
 				<div className={styles.buttons}>
-					<PreviousResultsButton />
-					<Button
-						iconLeft={<DoneIcon width={25} height={25} />}
-						variant="large"
-						onClick={markDone}
-					>
-						Mark done
-					</Button>
-				</div>
-				<div className={styles.buttons}>
 					<Button
 						iconLeft={<WeightsIcon />}
 						iconRight={<ChevronIcon width={15} height={15} />}
@@ -131,6 +121,16 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 						iconRight={<ChevronIcon width={15} height={15} />}
 					>
 						Set RPE
+					</Button>
+				</div>
+				<div className={styles.buttons}>
+					<PreviousResultsButton />
+					<Button
+						variant="smallRound"
+						onClick={markDone}
+						align="right"
+					>
+						<DoneIcon width={33} height={28} />
 					</Button>
 				</div>
 			</section>
