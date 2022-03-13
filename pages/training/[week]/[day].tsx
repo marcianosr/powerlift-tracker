@@ -62,11 +62,17 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	const programExcersises = excersiseData.filter((item) => item.day === slug);
 	const programResult = programData.filter((item) => item?.day === slug);
 
-	const data = programExcersises.map((data) => {
-		const match = programResult.find((t) => t?.id === data.id);
+	const data = programExcersises
+		.map((data) => {
+			const match = programResult.find((t) => {
+				return t?.id === data.id;
+			});
 
-		return { ...data, result: match || null };
-	});
+			if (!match) return null;
+
+			return { ...data, result: match };
+		})
+		.filter((item) => item);
 
 	return { props: { data } };
 };
