@@ -106,12 +106,14 @@ export const loadColumnDataByLetter = async (
 			const result = parsedExcelData.filter(Boolean);
 
 			const weight = result[0].split("kg")[0];
+			const decimalWeight =
+				weight.includes(",") && weight.replace(",", ".");
 			const hasKGUnit = result[0].includes("kg");
 
 			return {
 				id: `${sheet.getCellByA1(`A${idx}`).value}${idx}`,
 				day: sheet.getCellByA1(`A${idx}`).value,
-				weight: +weight || result[0], // ! kg weights or "BW" or "Stand .."
+				weight: +decimalWeight || +weight || result[0], // ! kg weights or "BW" or "Stand .."
 				...(hasKGUnit ? { unit: "kg" } : { unit: "unknown" }),
 				reps: result[1].split(","),
 				RPE: result[result.length - 1],
