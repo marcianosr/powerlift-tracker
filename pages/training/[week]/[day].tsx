@@ -14,10 +14,16 @@ type TrainingPageProps = {
 const TrainingPage: NextPage<TrainingPageProps> = ({ data }) => {
 	const { query } = useRouter();
 
+	const noTrainingPrescription = data.filter((item) => item.plan && []);
+
 	return (
 		<Layout>
 			<Header pageTitle={query.day} />
-			<CurrentExercise data={data} />
+			{noTrainingPrescription.length === 0 ? (
+				<h1>No prescribed weights yet.</h1>
+			) : (
+				<CurrentExercise data={data} />
+			)}
 		</Layout>
 	);
 };
@@ -64,13 +70,11 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
 	const data = programExcersises
 		.map((data) => {
-			const match = programResult.find((t) => {
-				return t?.id === data.id;
-			});
+			const match = programResult.find((t) => t?.id === data.id);
 
-			if (!match) return null;
+			if (!match) return { ...data, plan: null };
 
-			return { ...data, result: match };
+			return { ...data, plan: match };
 		})
 		.filter((item) => item);
 

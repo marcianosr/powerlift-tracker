@@ -20,7 +20,7 @@ type CurrentExerciseProps = {
 		day: "A" | "B" | "C" | "D";
 		reps: number;
 		sets: number;
-		result: {
+		plan: {
 			id: string;
 			day: "A" | "B" | "C" | "D";
 			weight: number;
@@ -38,6 +38,7 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 		current: data[0],
 		count: 1,
 	});
+
 	const [count, setCount] = useState(1);
 	const [currentSet, setCurrentSet] = useState({
 		total: exercises.current.sets,
@@ -70,6 +71,16 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 		}
 	};
 
+	const onSkip = () => {
+		setCount(count + 1);
+
+		return setExercises({
+			...exercises,
+			current: data[count],
+			count: count,
+		});
+	};
+
 	console.log(data);
 
 	return (
@@ -77,63 +88,97 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 			<Title shade="light" variant="x-small">
 				Doing
 			</Title>
-			<Card>
-				<section>
-					<Title tag="h3" variant="small" shade="light">
-						{exercises.current.exercise}
-					</Title>
-					<div className={styles.weightContent}>
+			{!exercises.current.plan ? (
+				<>
+					<Card>
+						<Title tag="h3" variant="small" shade="light">
+							{exercises.current.exercise}
+						</Title>
 						<span className={styles.subTitle}>
-							Set {currentSet.count}
+							It's skip {exercises.current.exercise} day!
 						</span>
-						{exercises.current.type === "barbell" && (
-							<WeightIndicator
-								weights={divideWeightForPlates(
-									exercises.current.result.weight -
-										Bars.Olympic
-								)}
-							/>
-						)}
-						<WeightLine
-							weight={exercises.current.result.weight}
-							reps={exercises.current.reps}
-						/>
-						<RPEContainer RPE={exercises.current.result.RPE || 0} />
+					</Card>
+					<div className={styles.buttons}>
+						<Button
+							variant="smallRound"
+							onClick={onSkip}
+							align="right"
+						>
+							Go to next
+						</Button>
 					</div>
-				</section>
-			</Card>
-			<section className={styles.actionsContainer}>
-				<div className={styles.buttons}>
-					<Button
-						iconLeft={<WeightsIcon />}
-						iconRight={<ChevronIcon width={15} height={15} />}
-					>
-						Change load
-					</Button>
-					<Button
-						iconLeft={<span className={styles.hashIcon}>#</span>}
-						iconRight={<ChevronIcon width={15} height={15} />}
-					>
-						Change reps
-					</Button>
-					<Button
-						iconLeft={<RPEIcon />}
-						iconRight={<ChevronIcon width={15} height={15} />}
-					>
-						Set RPE
-					</Button>
-				</div>
-				<div className={styles.buttons}>
-					<PreviousResultsButton />
-					<Button
-						variant="smallRound"
-						onClick={markDone}
-						align="right"
-					>
-						<DoneIcon width={33} height={28} />
-					</Button>
-				</div>
-			</section>
+				</>
+			) : (
+				<>
+					<Card>
+						<section>
+							<Title tag="h3" variant="small" shade="light">
+								{exercises.current.exercise}
+							</Title>
+							<div className={styles.weightContent}>
+								<span className={styles.subTitle}>
+									Set {currentSet.count}
+								</span>
+								{exercises.current.type === "barbell" && (
+									<WeightIndicator
+										weights={divideWeightForPlates(
+											exercises.current.plan.weight -
+												Bars.Olympic
+										)}
+									/>
+								)}
+								<WeightLine
+									weight={exercises.current.plan.weight}
+									reps={exercises.current.reps}
+								/>
+								<RPEContainer
+									RPE={exercises.current.plan.RPE || 0}
+								/>
+							</div>
+						</section>
+					</Card>
+					<section className={styles.actionsContainer}>
+						<div className={styles.buttons}>
+							<Button
+								iconLeft={<WeightsIcon />}
+								iconRight={
+									<ChevronIcon width={15} height={15} />
+								}
+							>
+								Change load
+							</Button>
+							<Button
+								iconLeft={
+									<span className={styles.hashIcon}>#</span>
+								}
+								iconRight={
+									<ChevronIcon width={15} height={15} />
+								}
+							>
+								Change reps
+							</Button>
+							<Button
+								iconLeft={<RPEIcon />}
+								iconRight={
+									<ChevronIcon width={15} height={15} />
+								}
+							>
+								Set RPE
+							</Button>
+						</div>
+						<div className={styles.buttons}>
+							<PreviousResultsButton />
+							<Button
+								variant="smallRound"
+								onClick={markDone}
+								align="right"
+							>
+								<DoneIcon width={33} height={28} />
+							</Button>
+						</div>
+					</section>
+				</>
+			)}
 		</section>
 	);
 };
