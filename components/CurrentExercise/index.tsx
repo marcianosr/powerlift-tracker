@@ -95,14 +95,15 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 							{exercises.current.exercise}
 						</Title>
 						<span className={styles.subTitle}>
-							It's skip {exercises.current.exercise} day!
+							It's skip "{exercises.current.exercise}" day!
 						</span>
 					</Card>
 					<div className={styles.buttons}>
 						<Button
-							variant="smallRound"
+							variant="large"
 							onClick={onSkip}
 							align="right"
+							iconRight={<ChevronIcon width={15} height={15} />}
 						>
 							Go to next
 						</Button>
