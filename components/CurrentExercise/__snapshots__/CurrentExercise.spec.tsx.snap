@@ -1,0 +1,208 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders the card data 1`] = `
+<DocumentFragment>
+  <section
+    class="container"
+  >
+    <span
+      class="title light x-small"
+    >
+      Doing
+    </span>
+    <article
+      class="card"
+    >
+      <section>
+        <h3
+          class="title light small"
+        >
+          1) Cluster Deadlift (1MIN RI)
+        </h3>
+        <div
+          class="weightContent"
+        >
+          <span
+            class="subTitle"
+          >
+            Set 1
+          </span>
+          <div
+            class="weightIndicator"
+          >
+            <div
+              class="plate gray"
+              data-testid="plate-1.25"
+            />
+            <div
+              class="plate yellow"
+              data-testid="plate-15"
+            />
+            <div
+              class="plate red"
+              data-testid="plate-25"
+            />
+            <div
+              class="plate red"
+              data-testid="plate-25"
+            />
+            <div
+              class="plate red"
+              data-testid="plate-25"
+            />
+            <div
+              class="plate red"
+              data-testid="plate-25"
+            />
+          </div>
+          <div
+            class="weightContainer"
+          >
+            <span
+              class="weight"
+            >
+              252.5
+            </span>
+            <span
+              class="kg"
+            >
+              kg
+            </span>
+             
+            <span
+              class="x"
+            >
+              x
+            </span>
+             
+            <span
+              class="reps"
+              style="--textLength: 2.5rem;"
+            >
+              1
+            </span>
+          </div>
+          <div
+            class="container"
+          >
+            <span>
+              @
+            </span>
+            <div
+              class="RPEContainer redOrange"
+            >
+              9
+            </div>
+          </div>
+        </div>
+      </section>
+    </article>
+    <section
+      class="actionsContainer"
+    >
+      <div
+        class="buttons"
+      >
+        <button
+          class="button undefined"
+          role="button"
+        >
+          <test-file-stub />
+          <span
+            class="text"
+          >
+            Change load
+          </span>
+          <test-file-stub
+            height="15"
+            width="15"
+          />
+        </button>
+        <button
+          class="button undefined"
+          role="button"
+        >
+          <span
+            class="hashIcon"
+          >
+            #
+          </span>
+          <span
+            class="text"
+          >
+            Change reps
+          </span>
+          <test-file-stub
+            height="15"
+            width="15"
+          />
+        </button>
+        <button
+          class="button undefined"
+          role="button"
+        >
+          <test-file-stub />
+          <span
+            class="text"
+          >
+            Set RPE
+          </span>
+          <test-file-stub
+            height="15"
+            width="15"
+          />
+        </button>
+      </div>
+      <div
+        class="buttons"
+      >
+        <button
+          class="button large"
+          role="button"
+        >
+          <span
+            class="text"
+          >
+            <div
+              class="previousContainer"
+            >
+              <span
+                class="title darker small"
+              >
+                Previous
+              </span>
+              <span>
+                <span>
+                  185kg x 2
+                </span>
+                 
+                <span>
+                  @ 7.5
+                </span>
+                 
+              </span>
+            </div>
+          </span>
+          <test-file-stub
+            height="15"
+            width="15"
+          />
+        </button>
+        <button
+          class="button smallRound alignRight"
+          role="button"
+        >
+          <span
+            class="text"
+          >
+            <test-file-stub
+              height="28"
+              width="33"
+            />
+          </span>
+        </button>
+      </div>
+    </section>
+  </section>
+</DocumentFragment>
+`;

@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import styles from "./styles.module.scss";
 
 type RPEContainerProps = {
-	RPE?: number;
+	RPE?: string;
 };
 
 const RPE_MAPPING: RPEMappingTypes = {

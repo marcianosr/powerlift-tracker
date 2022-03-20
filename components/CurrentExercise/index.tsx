@@ -97,7 +97,7 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 									reps={exercises.current.reps}
 								/>
 								<RPEContainer
-									RPE={exercises.current.plan.RPE || 0}
+									RPE={exercises.current.plan.RPE || ""}
 								/>
 							</div>
 						</section>

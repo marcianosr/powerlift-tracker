@@ -13,7 +13,7 @@ export type ExcelData = {
 	day: DayValues;
 	reps: string;
 	sets: number;
-	type: "barbell" | "machine" | "dumbell";
+	type: "barbell" | "machine" | "dumbell" | "no-type";
 	plan: Plan;
 };
 
@@ -23,7 +23,7 @@ type Plan = {
 	weight: number | string;
 	unit: string;
 	reps: string[];
-	RPE: number;
+	RPE: string;
 } | null;
 
 type TrainingPageProps = {
