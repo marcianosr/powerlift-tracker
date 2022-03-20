@@ -2,8 +2,8 @@ import React, { FC, CSSProperties } from "react";
 import styles from "./styles.module.scss";
 
 type WeightLineProps = {
-	weight: number;
-	reps: number;
+	weight: number | string;
+	reps: string;
 };
 
 interface FontSize extends CSSProperties {
@@ -13,8 +13,7 @@ interface FontSize extends CSSProperties {
 // Check if this is possible with CSS Container queries
 
 const WeightLine: FC<WeightLineProps> = ({ weight, reps }) => {
-	const size = reps.toString().length < 4 ? 2.5 : 2;
-	console.log(weight);
+	const size = reps.length < 4 ? 2.5 : 2;
 
 	return (
 		<div className={styles.weightContainer}>

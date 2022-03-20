@@ -7,8 +7,27 @@ import { getBasicProgramInfo, loadColumnDataByLetter } from "../../../util";
 import CurrentExercise from "@/components/CurrentExercise";
 import Header from "@/components/Header";
 
+export type ExcelData = {
+	id: string;
+	exercise: string;
+	day: DayValues;
+	reps: string;
+	sets: number;
+	type: "barbell" | "machine" | "dumbell";
+	plan: Plan;
+};
+
+type Plan = {
+	id: string;
+	day: DayValues;
+	weight: number | string;
+	unit: string;
+	reps: string[];
+	RPE: number;
+} | null;
+
 type TrainingPageProps = {
-	data: any;
+	data: ExcelData[];
 };
 
 const TrainingPage: NextPage<TrainingPageProps> = ({ data }) => {
@@ -29,9 +48,9 @@ const TrainingPage: NextPage<TrainingPageProps> = ({ data }) => {
 };
 
 type SlugKeys = "dag-a" | "dag-b" | "dag-c" | "dag-d";
-type SlugValues = "A" | "B" | "C" | "D";
+type DayValues = "A" | "B" | "C" | "D";
 type SlugMappingTypes = {
-	[key in SlugKeys]: SlugValues;
+	[key in SlugKeys]: DayValues;
 };
 
 const DAY_KEYS_BY_ROUTE_MAPPING: SlugMappingTypes = {
@@ -58,9 +77,15 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	await doc.loadInfo();
 	const sheet = doc.sheetsByIndex[0]; // ? improve: get training by tab name
 	const weekIndexFromQuery = params?.week || "";
-	const excersiseData = await getBasicProgramInfo(sheet);
+	const excersiseData = (await getBasicProgramInfo(sheet)) as Exclude<
+		ExcelData,
+		"plan"
+	>[];
 
-	const programData = await loadColumnDataByLetter(sheet, weekIndexFromQuery);
+	const programData = (await loadColumnDataByLetter(
+		sheet,
+		weekIndexFromQuery
+	)) as (Plan | undefined)[];
 
 	const dayQuery = params?.day as SlugKeys;
 	const slug = DAY_KEYS_BY_ROUTE_MAPPING[dayQuery];

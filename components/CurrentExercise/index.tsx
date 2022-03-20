@@ -1,35 +1,17 @@
 import React, { FC, useState } from "react";
-import Button from "../Button";
 import Card from "../Card";
 import WeightLine from "../WeightLine";
 import WeightIndicator from "../WeightIndicator";
-import PreviousResultsButton from "../PreviousResultsButton";
-import WeightsIcon from "../../public/icons/weights.svg";
-import DoneIcon from "../../public/icons/done.svg";
-import RPEIcon from "../../public/icons/rpe.svg";
-import ChevronIcon from "../../public/icons/chevron.svg";
 import styles from "./styles.module.scss";
 import RPEContainer from "../RPEContainer";
 import Title from "../Title";
 import { Bars, divideWeightForPlates } from "../WeightIndicator/utils";
+import SkipExercise from "./SkipExercise";
+import ActionsContainer from "./ActionsContainer";
+import { ExcelData } from "@/pages/training/[week]/[day]";
 
 type CurrentExerciseProps = {
-	data: {
-		id: string;
-		exercise: string;
-		day: "A" | "B" | "C" | "D";
-		reps: number;
-		sets: number;
-		plan: {
-			id: string;
-			day: "A" | "B" | "C" | "D";
-			weight: number;
-			unit: "kg" | "lbs";
-			reps: string[];
-			RPE: number;
-		};
-		type: "barbell" | "machine" | "dumbell";
-	}[];
+	data: ExcelData[];
 };
 
 const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
@@ -81,34 +63,16 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 		});
 	};
 
-	console.log(data);
-
 	return (
 		<section className={styles.container}>
 			<Title shade="light" variant="x-small">
 				Doing
 			</Title>
 			{!exercises.current.plan ? (
-				<>
-					<Card>
-						<Title tag="h3" variant="small" shade="light">
-							{exercises.current.exercise}
-						</Title>
-						<span className={styles.subTitle}>
-							It's skip "{exercises.current.exercise}" day!
-						</span>
-					</Card>
-					<div className={styles.buttons}>
-						<Button
-							variant="large"
-							onClick={onSkip}
-							align="right"
-							iconRight={<ChevronIcon width={15} height={15} />}
-						>
-							Go to next
-						</Button>
-					</div>
-				</>
+				<SkipExercise
+					exercise={exercises.current.exercise}
+					onSkip={onSkip}
+				/>
 			) : (
 				<>
 					<Card>
@@ -123,7 +87,7 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 								{exercises.current.type === "barbell" && (
 									<WeightIndicator
 										weights={divideWeightForPlates(
-											exercises.current.plan.weight -
+											+exercises.current.plan.weight -
 												Bars.Olympic
 										)}
 									/>
@@ -138,46 +102,7 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 							</div>
 						</section>
 					</Card>
-					<section className={styles.actionsContainer}>
-						<div className={styles.buttons}>
-							<Button
-								iconLeft={<WeightsIcon />}
-								iconRight={
-									<ChevronIcon width={15} height={15} />
-								}
-							>
-								Change load
-							</Button>
-							<Button
-								iconLeft={
-									<span className={styles.hashIcon}>#</span>
-								}
-								iconRight={
-									<ChevronIcon width={15} height={15} />
-								}
-							>
-								Change reps
-							</Button>
-							<Button
-								iconLeft={<RPEIcon />}
-								iconRight={
-									<ChevronIcon width={15} height={15} />
-								}
-							>
-								Set RPE
-							</Button>
-						</div>
-						<div className={styles.buttons}>
-							<PreviousResultsButton />
-							<Button
-								variant="smallRound"
-								onClick={markDone}
-								align="right"
-							>
-								<DoneIcon width={33} height={28} />
-							</Button>
-						</div>
-					</section>
+					<ActionsContainer markDone={markDone} />
 				</>
 			)}
 		</section>
