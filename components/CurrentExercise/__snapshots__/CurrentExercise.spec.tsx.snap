@@ -190,6 +190,7 @@ exports[`renders the card data 1`] = `
         </button>
         <button
           class="button smallRound alignRight"
+          data-testid="doneButton"
           role="button"
         >
           <span

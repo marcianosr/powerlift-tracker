@@ -1,5 +1,5 @@
 import { ExcelData } from "@/pages/training/[week]/[day]";
-import { render } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import CurrentExercise from ".";
 
 const mockData: ExcelData[] = [
@@ -100,4 +100,12 @@ test("renders the card data", () => {
 	const { asFragment } = render(<CurrentExercise data={mockData} />);
 
 	expect(asFragment()).toMatchSnapshot();
+});
+
+test("show the finish button when there are no exercises left", async () => {
+	render(<CurrentExercise data={mockData.slice(mockData.length - 1)} />);
+	const doneButton = screen.getByText(/Go to next/);
+
+	fireEvent.click(doneButton);
+	screen.getByText("Finish training");
 });

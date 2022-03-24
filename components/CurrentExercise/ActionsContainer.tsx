@@ -36,7 +36,12 @@ const ActionsContainer: FC<ActionsContainerProps> = ({ markDone }) => {
 			</div>
 			<div className={styles.buttons}>
 				<PreviousResultsButton />
-				<Button variant="smallRound" onClick={markDone} align="right">
+				<Button
+					variant="smallRound"
+					onClick={markDone}
+					align="right"
+					testId="doneButton"
+				>
 					<DoneIcon width={33} height={28} />
 				</Button>
 			</div>

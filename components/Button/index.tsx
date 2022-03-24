@@ -8,6 +8,7 @@ type ButtonProps = {
 	variant?: "large" | "smallRound";
 	align?: "left" | "right";
 	onClick?: () => void;
+	testId?: string;
 };
 
 const Button: FC<ButtonProps> = ({
@@ -16,11 +17,13 @@ const Button: FC<ButtonProps> = ({
 	iconRight,
 	onClick,
 	align = "left",
+	testId,
 	children,
 }) => {
 	return (
 		<button
 			onClick={onClick}
+			data-testid={testId}
 			role="button"
 			className={classNames(styles.button, styles[variant], {
 				[styles.alignRight]: align === "right",
