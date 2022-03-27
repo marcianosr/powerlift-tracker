@@ -76,6 +76,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
 	await doc.loadInfo();
 	const sheet = doc.sheetsByIndex[0]; // ? improve: get training by tab name
+
 	const weekIndexFromQuery = params?.week || "";
 	const excersiseData = (await getBasicProgramInfo(sheet)) as Exclude<
 		ExcelData,
