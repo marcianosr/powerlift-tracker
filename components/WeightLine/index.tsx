@@ -3,7 +3,7 @@ import styles from "./styles.module.scss";
 
 type WeightLineProps = {
 	weight: number | string;
-	reps: string;
+	reps?: string;
 };
 
 interface FontSize extends CSSProperties {
@@ -13,7 +13,7 @@ interface FontSize extends CSSProperties {
 // Check if this is possible with CSS Container queries
 
 const WeightLine: FC<WeightLineProps> = ({ weight, reps }) => {
-	const size = reps.length < 4 ? 2.5 : 2;
+	const size = reps && reps?.length < 4 ? 2.5 : 2;
 
 	return (
 		<div className={styles.weightContainer}>
@@ -26,7 +26,7 @@ const WeightLine: FC<WeightLineProps> = ({ weight, reps }) => {
 				className={styles.reps}
 				style={{ "--textLength": `${size}rem` } as FontSize}
 			>
-				{reps}
+				{reps ? reps : "No reps scheme yet. "}
 			</span>
 		</div>
 	);

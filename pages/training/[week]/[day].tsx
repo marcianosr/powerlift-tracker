@@ -14,10 +14,10 @@ export type ExcelData = {
 	reps: string;
 	sets: number;
 	type: "barbell" | "machine" | "dumbell" | "no-type";
-	plan: Plan;
+	result: Result;
 };
 
-type Plan = {
+type Result = {
 	id: string;
 	day: DayValues;
 	weight: number | string;
@@ -33,7 +33,9 @@ type TrainingPageProps = {
 const TrainingPage: NextPage<TrainingPageProps> = ({ data }) => {
 	const { query } = useRouter();
 
-	const noTrainingPrescription = data.filter((item) => item.plan && []);
+	console.log(data);
+
+	const noTrainingPrescription = data.filter((item) => item.result && []);
 
 	return (
 		<Layout>
@@ -86,7 +88,9 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	const programData = (await loadColumnDataByLetter(
 		sheet,
 		weekIndexFromQuery
-	)) as (Plan | undefined)[];
+	)) as (Result | undefined)[];
+
+	// console.log(programData);
 
 	const dayQuery = params?.day as SlugKeys;
 	const slug = DAY_KEYS_BY_ROUTE_MAPPING[dayQuery];
@@ -98,9 +102,9 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 		.map((data) => {
 			const match = programResult.find((t) => t?.id === data.id);
 
-			if (!match) return { ...data, plan: null };
+			if (!match) return { ...data, result: null };
 
-			return { ...data, plan: match };
+			return { ...data, result: match };
 		})
 		.filter((item) => item);
 

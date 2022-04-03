@@ -91,7 +91,9 @@ export const loadColumnDataByLetter = async (
 				`${excelColumnForWeek[1]}${idx}`
 			).value;
 
-			if (!firstColumn || !secondColumn) return;
+			// firstColumn should be exercises column
+			// secondColumn should be RPE column
+			if (!firstColumn) return;
 
 			const parsedExcelData =
 				typeof firstColumn === "string" &&
@@ -104,6 +106,9 @@ export const loadColumnDataByLetter = async (
 					: [];
 
 			const result = parsedExcelData.filter(Boolean);
+			const extractedComment = result.filter(
+				(r) => r.startsWith("(") && r
+			);
 
 			const weight = result[0].split("kg")[0];
 			const decimalWeight =
@@ -117,6 +122,7 @@ export const loadColumnDataByLetter = async (
 				...(hasKGUnit ? { unit: "kg" } : { unit: "unknown" }),
 				reps: result[1].split(","),
 				RPE: result[result.length - 1],
+				comment: extractedComment.length > 0 && extractedComment,
 			};
 		})
 		.filter(Boolean);

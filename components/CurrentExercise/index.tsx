@@ -102,7 +102,7 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 
 			{exercises.exercisesLeft === 0 && <h1>doneButton</h1>}
 
-			{!exercises.current.plan ? (
+			{!exercises.current.result ? (
 				<SkipExercise
 					exercise={exercises.current.exercise}
 					onSkip={onSkip}
@@ -121,17 +121,17 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 								{exercises.current.type === "barbell" && (
 									<WeightIndicator
 										weights={divideWeightForPlates(
-											+exercises.current.plan.weight -
+											+exercises.current.result.weight -
 												Bars.Olympic
 										)}
 									/>
 								)}
 								<WeightLine
-									weight={exercises.current.plan.weight}
+									weight={exercises.current.result.weight}
 									reps={exercises.current.reps}
 								/>
 								<RPEContainer
-									RPE={exercises.current.plan.RPE || ""}
+									RPE={exercises.current.result.RPE || ""}
 								/>
 							</div>
 						</section>

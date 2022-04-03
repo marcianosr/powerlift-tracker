@@ -1,5 +1,5 @@
 import { ExcelData } from "@/pages/training/[week]/[day]";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import CurrentExercise from ".";
 
 const mockData: ExcelData[] = [
@@ -10,7 +10,7 @@ const mockData: ExcelData[] = [
 		sets: 6,
 		reps: "1",
 		type: "barbell",
-		plan: {
+		result: {
 			id: "C20",
 			day: "C",
 			weight: 252.5,
@@ -26,7 +26,7 @@ const mockData: ExcelData[] = [
 		sets: 2,
 		reps: "4",
 		type: "barbell",
-		plan: {
+		result: {
 			id: "C21",
 			day: "C",
 			weight: 227.5,
@@ -42,7 +42,7 @@ const mockData: ExcelData[] = [
 		sets: 3,
 		reps: "5",
 		type: "barbell",
-		plan: {
+		result: {
 			id: "C22",
 			day: "C",
 			weight: 165,
@@ -58,7 +58,7 @@ const mockData: ExcelData[] = [
 		sets: 3,
 		reps: "10-12",
 		type: "no-type",
-		plan: null,
+		result: null,
 	},
 	{
 		id: "C24",
@@ -67,7 +67,7 @@ const mockData: ExcelData[] = [
 		sets: 3,
 		reps: "15-20",
 		type: "no-type",
-		plan: null,
+		result: null,
 	},
 	{
 		id: "C25",
@@ -76,7 +76,7 @@ const mockData: ExcelData[] = [
 		sets: 3,
 		reps: "10-12",
 		type: "machine",
-		plan: {
+		result: {
 			id: "C25",
 			day: "C",
 			weight: "Stand 13",
@@ -88,11 +88,11 @@ const mockData: ExcelData[] = [
 	{
 		id: "C26",
 		day: "C",
-		exercise: "6) Copenhagen Plank",
+		exercise: "6) Copenhagen plank",
 		sets: 3,
 		reps: "ALAP",
 		type: "no-type",
-		plan: null,
+		result: null,
 	},
 ];
 
