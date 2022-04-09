@@ -143,7 +143,9 @@ export const getBasicProgramInfo = async (
 			day: sheet.getCellByA1(`A${idx}`).value,
 			exercise: sheet.getCellByA1(`B${idx}`).value,
 			sets: sheet.getCellByA1(`C${idx}`).value,
-			reps: sheet.getCellByA1(`D${idx}`).value,
+			reps: sheet.getCellByA1(`D${idx}`).value
+				? sheet.getCellByA1(`D${idx}`).value.toString().split(" ")[0]
+				: null,
 			type: !sheet.getCellByA1(`B${idx}`).value
 				? ""
 				: exerciseForType(sheet.getCellByA1(`B${idx}`).value.toString())
