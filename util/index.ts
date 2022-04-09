@@ -4,7 +4,7 @@ import { exerciseForType } from "./exerciseForType";
 
 // ? Training actually starts in column "F"
 export const START_ROW_OFFSET = 4;
-const START_COLUMN_OFFSET = 5;
+export const START_COLUMN_OFFSET = 5;
 
 export const getExcelColumnByWeek = (givenIndex: number) => {
 	let weekIndexes = [givenIndex];

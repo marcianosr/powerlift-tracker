@@ -82,7 +82,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	const weekIndexFromQuery = params?.week || "";
 	const excersiseData = (await getBasicProgramInfo(sheet)) as Exclude<
 		ExcelData,
-		"plan"
+		"result"
 	>[];
 
 	const programData = (await loadColumnDataByLetter(

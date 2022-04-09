@@ -8,49 +8,97 @@ import {
 	GoogleSpreadsheetWorksheet,
 } from "google-spreadsheet";
 
+import { getDatabase, ref, set, get, child } from "firebase/database";
+import {
+	generateIndexForColumn,
+	getExcelColumnByWeek,
+	START_COLUMN_OFFSET,
+	START_ROW_OFFSET,
+} from "../util";
+
 type OverviewProps = {
-	trainingWeek: string | null;
+	startWeek: string | null;
+	currentTrainingWeek: number;
+	availableSheetTitles: string[];
+	selectedSheet: string;
 	error: string | null;
 };
 
-const Overview: NextPage<OverviewProps> = ({ trainingWeek, error }) => {
+const Overview: NextPage<OverviewProps> = ({
+	startWeek,
+	currentTrainingWeek,
+	error,
+	availableSheetTitles,
+	selectedSheet,
+}) => {
 	if (error)
 		return (
 			<Layout>
 				<h1>{error}</h1>
 			</Layout>
 		);
-	// link to training/11/dag-a
-	const getCurrentWeek = getISOWeek(Date.now());
-	// const trainingWeek = getCurrentWeek - sheetNumberWeekOffset;
+
+	const currentCalendarWeek = getISOWeek(Date.now());
+
+	const saveActiveSheetToDatabase = (e: React.MouseEvent) => {
+		const buttonValue = e.currentTarget.textContent;
+		const database = getDatabase();
+
+		set(ref(database, `/user/marciano`), {
+			activeSheet: buttonValue,
+		});
+	};
+
 	return (
 		<Layout>
 			<section>
-				<h1>Nog 8 weken tot het NK</h1>
-				<h1>Week {getCurrentWeek}</h1>
-				<h1>Trainingsweek {trainingWeek?.split("-")[0]}</h1>
-				<ul>
-					<li>
-						<Link href={`/training/${trainingWeek}/dag-a`}>
-							Dag 1
+				<p>Geselecteerde sheet: {selectedSheet}</p>
+				<p>
+					Alle actieve sheets:{" "}
+					{availableSheetTitles.map((titles) => (
+						<Link passHref href={`/?sheet=${titles}`}>
+							<button onClick={saveActiveSheetToDatabase}>
+								{titles}
+							</button>
 						</Link>
-					</li>
-					<li>
-						<Link href={`/training/${trainingWeek}/dag-b`}>
-							Dag 2
-						</Link>
-					</li>
-					<li>
-						<Link href={`/training/${trainingWeek}/dag-c`}>
-							Dag 3
-						</Link>
-					</li>
-					<li>
-						<Link href={`/training/${trainingWeek}/dag-d`}>
-							Dag 4
-						</Link>
-					</li>
-				</ul>
+					))}
+				</p>
+				{selectedSheet && (
+					<>
+						<h1>Week {currentCalendarWeek}</h1>
+						<h1>Trainingsweek {currentTrainingWeek}</h1>
+						<ul>
+							<li>
+								<Link
+									href={`/training/${currentTrainingWeek}/dag-a`}
+								>
+									Dag 1
+								</Link>
+							</li>
+							<li>
+								<Link
+									href={`/training/${currentTrainingWeek}/dag-b`}
+								>
+									Dag 2
+								</Link>
+							</li>
+							<li>
+								<Link
+									href={`/training/${currentTrainingWeek}/dag-c`}
+								>
+									Dag 3
+								</Link>
+							</li>
+							<li>
+								<Link
+									href={`/training/${currentTrainingWeek}/dag-d`}
+								>
+									Dag 4
+								</Link>
+							</li>
+						</ul>
+					</>
+				)}
 			</section>
 		</Layout>
 	);
@@ -59,7 +107,7 @@ const Overview: NextPage<OverviewProps> = ({ trainingWeek, error }) => {
 
 // Get the first cell that returns nothing in the RPE get the "last week"
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 	const creds = require("../powerlift-339515-4c4a82b74db1.json"); // the file saved above
 	const doc = new GoogleSpreadsheet(
 		"1CCNcbt-nEYZS9z_uowQK7SWmHCPAJGgQ9I8H92C-6Ck"
@@ -74,52 +122,122 @@ export const getServerSideProps: GetServerSideProps = async () => {
 	});
 
 	await doc.loadInfo();
+	const trainingsWeekSheet = doc.sheetsByTitle["Trainingsweken"];
+	const sheetFromUrl = query.sheet as any;
 
-	const sheet = doc.sheetsByTitle["Trainingsweken"];
+	const activeSheetFromDB = await getActiveSheetFromDatabase();
 
-	if (!sheet) {
+	const selectedSheet = sheetFromUrl || activeSheetFromDB.activeSheet;
+
+	const getAllSheetTitles = Object.keys(doc.sheetsByTitle);
+	const getSelectedSheet = doc.sheetsByTitle[selectedSheet];
+
+	////////////////////////////////////////////////// ?
+	// ? filter out sheets that are not part of training
+	// ? const availableSheetTitles = getAllSheetTitles.filter(
+	// ?	(title) => getSelectedSheet.headerValues !== undefined
+	// ? );
+	//////////////////////////////////////////////// ?
+
+	if (!trainingsWeekSheet) {
 		await createSheet(doc);
 		return { props: { error: "Verfris deze pagina aub." } };
 	}
 
 	// ! Watch out that this code only runs when a user enters the page.
-	if (sheet) await addWeekNumberToSheet(sheet);
+	if (trainingsWeekSheet)
+		await addWeekNumberToSheet(trainingsWeekSheet, selectedSheet);
 
-	const lastTrainingWeek = await getLastTrainingWeek(sheet);
+	const getTrainingStartWeek = await findStartWeek(
+		trainingsWeekSheet,
+		selectedSheet
+	);
 
-	return { props: { trainingWeek: lastTrainingWeek } };
+	const totalRowLength = (await getSelectedSheet.getRows()).length;
+
+	const getCurrentWeek = getISOWeek(Date.now());
+	const startWeek = getTrainingStartWeek?.split("-")[0] || "";
+	const startWeekIndex = getCurrentWeek - +startWeek;
+
+	const excelColumnForWeek = getExcelColumnByWeek(
+		generateIndexForColumn(startWeekIndex) + START_ROW_OFFSET
+	);
+
+	await getSelectedSheet.loadCells(
+		`${excelColumnForWeek[0]}${START_COLUMN_OFFSET}:${excelColumnForWeek[1]}${totalRowLength}`
+	);
+
+	return {
+		props: {
+			startWeek: getTrainingStartWeek,
+			currentTrainingWeek: startWeekIndex,
+			availableSheetTitles: getAllSheetTitles,
+			selectedSheet: activeSheetFromDB.activeSheet, // || sheet from db
+		},
+	};
 };
 
-const addWeekNumberToSheet = async (sheet: GoogleSpreadsheetWorksheet) => {
+const getActiveSheetFromDatabase = async () => {
+	const database = ref(getDatabase());
+
+	return get(child(database, `user/marciano`))
+		.then((snapshot) => {
+			if (snapshot.exists()) {
+				return snapshot.val();
+			} else {
+				console.log("No data available");
+			}
+		})
+		.catch((error) => {
+			console.error(error);
+		});
+};
+
+const addWeekNumberToSheet = async (
+	sheet: GoogleSpreadsheetWorksheet,
+	selectedSheet: string
+) => {
 	const rows = await sheet.getRows();
 	const getWeekAndYear = `${getISOWeek(Date.now())}-${getYear(Date.now())}`;
 
-	if (rows.length === 0) return sheet.addRow({ week: getWeekAndYear });
+	if (rows.length === 0)
+		return sheet.addRow({
+			startWeek: getWeekAndYear,
+			sheet: selectedSheet,
+		});
 
-	const lastElement = rows[rows.length - 1];
+	const findExistingSheetValue = rows.find(
+		(row) => row.sheet === selectedSheet
+	);
 
-	const lastWeekValue = lastElement.week;
-
-	if (lastWeekValue !== getWeekAndYear) {
-		return sheet.addRow({ week: getWeekAndYear });
+	if (!findExistingSheetValue) {
+		return sheet.addRow({
+			startWeek: getWeekAndYear,
+			sheet: selectedSheet,
+		});
 	}
 
 	return;
 };
 
-const getLastTrainingWeek = async (sheet: GoogleSpreadsheetWorksheet) => {
+const findStartWeek = async (
+	sheet: GoogleSpreadsheetWorksheet,
+	selectedSheet: string
+) => {
 	const rows = await sheet.getRows();
 
-	const lastElement = rows[rows.length - 1];
+	const startWeek = rows.find(
+		(row) => row.sheet === selectedSheet
+	)?.startWeek;
 
-	const lastWeekValue = lastElement.week;
-	return lastWeekValue;
+	return startWeek;
 };
 
 const createSheet = async (doc: GoogleSpreadsheet) =>
 	doc.addSheet({
 		headerValues: [
-			"week",
+			"startWeek",
+			"sheet",
 			"Dit blad wordt autogegenereerd. Niet verwijderen aub!",
 		],
 		title: "Trainingsweken",
