@@ -38,12 +38,7 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 		setCurrentSet({ ...currentSet, count: 1 });
 		setCount(count + 1);
 
-		return setExercises({
-			...exercises,
-			current: data[count],
-			count: count,
-			exercisesLeft: exercises.exercisesLeft - 1,
-		});
+		return setNextExercise();
 	};
 
 	const exerciseHasMultipleSets =
@@ -64,13 +59,16 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 	const onSkip = () => {
 		setCount(count + 1);
 
-		return setExercises({
+		return setNextExercise();
+	};
+
+	const setNextExercise = () =>
+		setExercises({
 			...exercises,
 			current: data[count],
 			count: count,
 			exercisesLeft: exercises.exercisesLeft - 1,
 		});
-	};
 
 	if (exercises.exercisesLeft === 0) {
 		return (
