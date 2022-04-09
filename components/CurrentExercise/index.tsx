@@ -34,6 +34,7 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 
 	const isExerciseDone =
 		currentSet.count === (exercises.current && exercises.current.sets);
+
 	const exerciseIsDone = () => {
 		setCurrentSet({ ...currentSet, count: 1 });
 		setCount(count + 1);
