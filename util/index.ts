@@ -96,16 +96,17 @@ export const loadColumnDataByLetter = async (
 			if (!firstColumn) return;
 
 			const parsedExcelData =
-				typeof firstColumn === "string" &&
-				(typeof secondColumn === "string" ||
-					typeof secondColumn === "number")
-					? firstColumn
-							.split(/x/)
-							.map((text) => text.trim())
-							.concat(secondColumn.toString())
+				typeof firstColumn === "string"
+					? firstColumn.split(/x/).map((text) => text.trim())
 					: [];
 
 			const result = parsedExcelData.filter(Boolean);
+			const RPE =
+				typeof secondColumn === "string" ||
+				typeof secondColumn === "number"
+					? secondColumn
+					: null;
+
 			const extractedComment = result.filter(
 				(r) => r.startsWith("(") && r
 			);
@@ -121,7 +122,7 @@ export const loadColumnDataByLetter = async (
 				weight: +decimalWeight || +weight || result[0], // ! kg weights or "BW" or "Stand .."
 				...(hasKGUnit ? { unit: "kg" } : { unit: "unknown" }),
 				reps: result[1].split(","),
-				RPE: result[result.length - 1],
+				RPE,
 				comment: extractedComment.length > 0 && extractedComment,
 			};
 		})
