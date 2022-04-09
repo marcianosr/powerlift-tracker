@@ -57,7 +57,7 @@ const mockData: ExcelData[] = [
 		exercise: "3) Hip Thrust machine ",
 		sets: 3,
 		reps: "10-12",
-		type: "no-type",
+		type: "not-specified",
 		result: null,
 	},
 	{
@@ -66,7 +66,7 @@ const mockData: ExcelData[] = [
 		exercise: "4) Seated hamstring Curl ",
 		sets: 3,
 		reps: "15-20",
-		type: "no-type",
+		type: "not-specified",
 		result: null,
 	},
 	{
@@ -91,7 +91,7 @@ const mockData: ExcelData[] = [
 		exercise: "6) Copenhagen plank",
 		sets: 3,
 		reps: "ALAP",
-		type: "no-type",
+		type: "not-specified",
 		result: null,
 	},
 ];

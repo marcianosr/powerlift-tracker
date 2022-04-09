@@ -13,7 +13,7 @@ export type ExcelData = {
 	day: DayValues;
 	reps: string;
 	sets: number;
-	type: "barbell" | "machine" | "dumbell" | "no-type";
+	type: "barbell" | "machine" | "dumbell" | "not-specified";
 	result: Result;
 };
 
@@ -89,8 +89,6 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 		sheet,
 		weekIndexFromQuery
 	)) as (Result | undefined)[];
-
-	// console.log(programData);
 
 	const dayQuery = params?.day as SlugKeys;
 	const slug = DAY_KEYS_BY_ROUTE_MAPPING[dayQuery];

@@ -41,7 +41,7 @@ export const exerciseForType = (exercise: string) => {
 	const type =
 		exerciseTypeMapping.find((item) =>
 			item.matches.find((name) => cleanExerciseName.match(name))
-		)?.type || "no-type";
+		)?.type || "not-specified";
 
 	return { type, exercise };
 };
