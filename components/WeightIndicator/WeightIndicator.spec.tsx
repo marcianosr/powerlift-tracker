@@ -89,7 +89,10 @@ test.each(mockData)(
 	"it shows the given plates by the given numbers $plates",
 	(mockData) => {
 		render(
-			<WeightIndicator weights={divideWeightForPlates(mockData.weight)} />
+			<WeightIndicator
+				size="small"
+				weights={divideWeightForPlates(mockData.weight)}
+			/>
 		);
 
 		mockData.plates.forEach((plate) => screen.getAllByTestId(`${plate}`));
