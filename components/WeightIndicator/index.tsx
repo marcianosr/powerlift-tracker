@@ -14,7 +14,7 @@ type PlateProps = {
 	onClick?: () => void;
 };
 
-export type PlateNumbers = 25 | 20 | 15 | 10 | 5 | 2.5 | 1.25 | 0.5;
+export type PlateNumbers = 25 | 20 | 15 | 10 | 5 | 2.5 | 1.25 | 0.5 | 0.25;
 
 type Plates =
 	| "red"
@@ -24,13 +24,14 @@ type Plates =
 	| "white"
 	| "black"
 	| "gray"
-	| "silver";
+	| "silver"
+	| "orange";
 
 type PlateMapping = {
 	[key in PlateNumbers]: Plates;
 };
 
-export const PLATE_MAPPING: PlateMapping = {
+export const PLATE_MAPPING: Record<PlateNumbers, Plates> = {
 	25: "red",
 	20: "blue",
 	15: "yellow",
@@ -39,6 +40,7 @@ export const PLATE_MAPPING: PlateMapping = {
 	2.5: "black",
 	1.25: "gray",
 	0.5: "silver",
+	0.25: "orange",
 };
 
 const PLATE_SIZES = {
