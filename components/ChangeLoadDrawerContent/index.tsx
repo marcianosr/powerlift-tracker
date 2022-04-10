@@ -36,7 +36,7 @@ const ChangeLoadDrawerContent: FC<ChangeLoadDrawerContentProps> = ({
 		</div>
 		<div className={styles.scrollablePlates}>
 			{sortedPlates.map((weight) => (
-				<FlatPlate weight={weight as PlateNumbers} />
+				<FlatPlate weight={weight as PlateNumbers} key={weight} />
 			))}
 		</div>
 	</>
