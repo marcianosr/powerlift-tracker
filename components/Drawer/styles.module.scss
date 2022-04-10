@@ -1,0 +1,32 @@
+.overlay {
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba($color: #fff, $alpha: 0.3);
+	position: absolute;
+	z-index: 0;
+	top: 0;
+	left: 0;
+}
+
+.drawer {
+	background-color: var(--black);
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+	position: absolute;
+	bottom: 0;
+	height: 70vh;
+	width: 100vw;
+	z-index: 1;
+	left: 0;
+
+	display: grid;
+	grid-template-rows: 50px 1fr 0.5fr;
+	row-gap: 1rem;
+	grid-template-columns: 1fr;
+	align-items: center;
+	place-content: center;
+
+	> h3 {
+		justify-self: center;
+	}
+}

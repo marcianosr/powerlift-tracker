@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import Card from "../Card";
 import WeightLine from "../WeightLine";
-import WeightIndicator from "../WeightIndicator";
+import WeightIndicator, { PlateNumbers } from "../WeightIndicator";
 import styles from "./styles.module.scss";
 import RPEContainer from "../RPEContainer";
 import Title from "../Title";
@@ -119,6 +119,7 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 								</span>
 								{exercises.current.type === "barbell" && (
 									<WeightIndicator
+										size="small"
 										weights={divideWeightForPlates(
 											+exercises.current.result.weight -
 												Bars.Olympic
@@ -135,7 +136,10 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 							</div>
 						</section>
 					</Card>
-					<ActionsContainer markDone={markDone} />
+					<ActionsContainer
+						markDone={markDone}
+						weight={exercises.current.result.weight as PlateNumbers}
+					/>
 				</>
 			)}
 		</section>

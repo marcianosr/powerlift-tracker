@@ -1,16 +1,27 @@
 .weightIndicator {
 	display: flex;
 	align-items: center;
-	gap: 0.5px;
+	gap: 5%;
+	position: relative;
 }
 
 .plate {
 	width: 4px;
-	height: 45px;
+	height: calc(45px * var(--heightMultiplier));
+}
+
+.flatPlate {
+	height: 100px;
+	width: 100px;
+	border-radius: 50px;
+	flex-shrink: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .red {
-	background-color: red;
+	background-color: #d20000;
 }
 
 .blue {
@@ -18,31 +29,32 @@
 }
 
 .yellow {
-	background-color: yellow;
-	height: 39px;
+	background-color: #d2bd00;
+	height: calc(39px * var(--heightMultiplier));
 }
 
 .green {
-	background-color: green;
-	height: 33px;
+	background-color: #0f762c;
+	height: calc(33px * var(--heightMultiplier));
 }
 
 .white {
 	background-color: white;
-	height: 24px;
+	color: black;
+	height: calc(24px * var(--heightMultiplier));
 }
 
 .black {
 	background-color: black;
-	height: 19px;
+	height: calc(19px * var(--heightMultiplier));
 }
 
 .gray {
 	background-color: #7e7e7e;
-	height: 13px;
+	height: calc(13px * var(--heightMultiplier));
 }
 
 .silver {
 	background-color: silver;
-	height: 10px;
+	height: calc(10px * var(--heightMultiplier));
 }

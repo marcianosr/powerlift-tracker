@@ -4,10 +4,13 @@ import styles from "./styles.module.scss";
 
 type WeightIndicatorProps = {
 	weights: PlateNumbers[];
+	size: "small" | "large";
 };
 
 type PlateProps = {
 	weight: PlateNumbers;
+	size: "small" | "large";
+	variant?: "default" | "flat";
 };
 
 export type PlateNumbers = 25 | 20 | 15 | 10 | 5 | 2.5 | 1.25 | 0.5;
@@ -26,7 +29,7 @@ type PlateMapping = {
 	[key in PlateNumbers]: Plates;
 };
 
-const PLATE_MAPPING: PlateMapping = {
+export const PLATE_MAPPING: PlateMapping = {
 	25: "red",
 	20: "blue",
 	15: "yellow",
@@ -37,20 +40,56 @@ const PLATE_MAPPING: PlateMapping = {
 	0.5: "silver",
 };
 
-const WeightIndicator: FC<WeightIndicatorProps> = ({ weights }) => {
+const PLATE_SIZES = {
+	large: { width: 30, heightMultiplier: 5 },
+	small: { width: 4, heightMultiplier: 1 },
+};
+
+const WeightIndicator: FC<WeightIndicatorProps> = ({ weights, size }) => {
 	return (
-		<div className={styles.weightIndicator}>
+		<div
+			className={styles.weightIndicator}
+			style={
+				{
+					"--heightMultiplier": PLATE_SIZES[size].heightMultiplier,
+				} as any
+			}
+		>
 			{weights.map((weight: PlateNumbers, idx: number) => (
-				<Plate weight={weight} key={idx} />
+				<Plate size={size} weight={weight} key={idx} />
 			))}
 		</div>
 	);
 };
 
-const Plate: FC<PlateProps> = ({ weight }) => {
+export const Plate: FC<PlateProps> = ({ weight, size }) => {
 	const plateStyles = classNames(styles.plate, styles[PLATE_MAPPING[weight]]);
 
-	return <div data-testid={`plate-${weight}`} className={plateStyles}></div>;
+	return (
+		<div
+			style={
+				{
+					"--heightMultiplier": PLATE_SIZES[size].heightMultiplier,
+					width: PLATE_SIZES[size].width,
+				} as any
+			}
+			data-testid={`plate-${weight}`}
+			className={plateStyles}
+		></div>
+	);
+};
+
+export const FlatPlate: FC<Omit<PlateProps, "size">> = ({ weight }) => {
+	const plateStyles = classNames(
+		styles.flatPlate,
+		styles[PLATE_MAPPING[weight]]
+	);
+
+	return (
+		<div data-testid={`plate-${weight}`} className={plateStyles}>
+			{weight}
+		</div>
+	);
 };
 
 export default WeightIndicator;

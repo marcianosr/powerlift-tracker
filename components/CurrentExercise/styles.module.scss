@@ -40,3 +40,41 @@
 		flex: 1;
 	}
 }
+
+.weightText {
+	font-size: 2.75rem;
+	font-weight: 800;
+	margin: 0;
+	margin-left: 1rem;
+
+	span {
+		font-size: 1.5rem;
+	}
+}
+
+.bar {
+	width: 100%;
+	height: 30px;
+	background-color: var(--gray-30);
+	// position: absolute;
+	// transform: translate(0%, calc(100% + 30px));
+}
+
+.weightIndicatorContainer {
+	// display: flex;
+	display: grid;
+	grid-template-columns: 2fr 1fr 1fr;
+	align-items: center;
+	// justify-self: end;
+	justify-content: space-between;
+}
+
+.scrollablePlates {
+	overflow-x: scroll;
+	display: flex;
+	gap: 1rem;
+	font-size: 2rem;
+	font-weight: 800;
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
