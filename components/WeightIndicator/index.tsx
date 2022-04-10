@@ -11,6 +11,7 @@ type PlateProps = {
 	weight: PlateNumbers;
 	size: "small" | "large";
 	variant?: "default" | "flat";
+	onClick?: () => void;
 };
 
 export type PlateNumbers = 25 | 20 | 15 | 10 | 5 | 2.5 | 1.25 | 0.5;
@@ -41,7 +42,7 @@ export const PLATE_MAPPING: PlateMapping = {
 };
 
 const PLATE_SIZES = {
-	large: { width: 30, heightMultiplier: 5 },
+	large: { width: 20, heightMultiplier: 5 },
 	small: { width: 4, heightMultiplier: 1 },
 };
 
@@ -79,14 +80,21 @@ export const Plate: FC<PlateProps> = ({ weight, size }) => {
 	);
 };
 
-export const FlatPlate: FC<Omit<PlateProps, "size">> = ({ weight }) => {
+export const FlatPlate: FC<Omit<PlateProps, "size">> = ({
+	weight,
+	onClick,
+}) => {
 	const plateStyles = classNames(
 		styles.flatPlate,
 		styles[PLATE_MAPPING[weight]]
 	);
 
 	return (
-		<div data-testid={`plate-${weight}`} className={plateStyles}>
+		<div
+			data-testid={`plate-${weight}`}
+			className={plateStyles}
+			onClick={onClick}
+		>
 			{weight}
 		</div>
 	);

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import Title from "../Title";
 import WeightIndicator, {
 	FlatPlate,
@@ -18,28 +18,46 @@ const sortedPlates = Object.entries(PLATE_MAPPING)
 
 const ChangeLoadDrawerContent: FC<ChangeLoadDrawerContentProps> = ({
 	weight,
-}) => (
-	<>
-		<Title tag="h3" variant="small" shade="light">
-			Change load for this set
-		</Title>
-		<div className={styles.weightIndicatorContainer}>
-			<p className={styles.weightText}>
-				{weight}
-				<span>kg</span>
-			</p>
-			<WeightIndicator
-				size="large"
-				weights={divideWeightForPlates(+weight - Bars.Olympic)}
-			/>
-			<div className={styles.bar}></div>
-		</div>
-		<div className={styles.scrollablePlates}>
-			{sortedPlates.map((weight) => (
-				<FlatPlate weight={weight as PlateNumbers} key={weight} />
-			))}
-		</div>
-	</>
-);
+}) => {
+	const [loadedBar, setLoadedBar] = useState({
+		plates: divideWeightForPlates(+weight - Bars.Olympic),
+		weight,
+	});
+
+	return (
+		<>
+			<Title tag="h3" variant="small" shade="light">
+				Change load for this set
+			</Title>
+			<div className={styles.weightIndicatorContainer}>
+				<p className={styles.weightText}>
+					{loadedBar.weight}
+					<span>kg</span>
+				</p>
+				<WeightIndicator size="large" weights={loadedBar.plates} />
+				<div className={styles.bar}></div>
+			</div>
+			<div className={styles.scrollablePlates}>
+				{sortedPlates.map((plateWeight) => (
+					<FlatPlate
+						weight={plateWeight as PlateNumbers}
+						key={plateWeight}
+						onClick={() => {
+							setLoadedBar({
+								...loadedBar,
+								plates: [
+									...loadedBar.plates,
+									plateWeight as PlateNumbers,
+								].sort((a, b) => a - b),
+								weight: (loadedBar.weight +
+									plateWeight) as PlateNumbers,
+							});
+						}}
+					/>
+				))}
+			</div>
+		</>
+	);
+};
 
 export default ChangeLoadDrawerContent;

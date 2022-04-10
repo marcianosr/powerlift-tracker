@@ -20,10 +20,9 @@
 .weightIndicatorContainer {
 	// display: flex;
 	display: grid;
-	grid-template-columns: 2fr 1fr 1fr;
+	grid-template-columns: 1fr 2fr 1fr;
 	align-items: center;
-	// justify-self: end;
-	justify-content: space-between;
+	justify-items: flex-end;
 }
 
 .scrollablePlates {
