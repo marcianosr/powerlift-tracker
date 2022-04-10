@@ -29,30 +29,37 @@ exports[`renders the card data 1`] = `
           </span>
           <div
             class="weightIndicator"
+            style="--heightMultiplier: 1;"
           >
             <div
               class="plate gray"
               data-testid="plate-1.25"
+              style="--heightMultiplier: 1; width: 4px;"
             />
             <div
               class="plate yellow"
               data-testid="plate-15"
+              style="--heightMultiplier: 1; width: 4px;"
             />
             <div
               class="plate red"
               data-testid="plate-25"
+              style="--heightMultiplier: 1; width: 4px;"
             />
             <div
               class="plate red"
               data-testid="plate-25"
+              style="--heightMultiplier: 1; width: 4px;"
             />
             <div
               class="plate red"
               data-testid="plate-25"
+              style="--heightMultiplier: 1; width: 4px;"
             />
             <div
               class="plate red"
               data-testid="plate-25"
+              style="--heightMultiplier: 1; width: 4px;"
             />
           </div>
           <div
