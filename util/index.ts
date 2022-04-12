@@ -100,6 +100,7 @@ export const loadColumnDataByLetter = async (
 					? firstColumn.split(/x/).map((text) => text.trim())
 					: [];
 
+			console.log("parsedExcelData", parsedExcelData);
 			const result = parsedExcelData.filter(Boolean);
 			const RPE =
 				typeof secondColumn === "string" ||
@@ -121,7 +122,7 @@ export const loadColumnDataByLetter = async (
 				day: sheet.getCellByA1(`A${idx}`).value,
 				weight: +decimalWeight || +weight || result[0], // ! kg weights or "BW" or "Stand .."
 				...(hasKGUnit ? { unit: "kg" } : { unit: "unknown" }),
-				reps: result[1].split(","),
+				reps: result[1]?.split(",") || "", // when reps are filled in, the training is done
 				RPE,
 				comment: extractedComment.length > 0 && extractedComment,
 			};
