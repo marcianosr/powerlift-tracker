@@ -100,7 +100,6 @@ export const loadColumnDataByLetter = async (
 					? firstColumn.split(/x/).map((text) => text.trim())
 					: [];
 
-			console.log("parsedExcelData", parsedExcelData);
 			const result = parsedExcelData.filter(Boolean);
 			const RPE =
 				typeof secondColumn === "string" ||
@@ -119,6 +118,7 @@ export const loadColumnDataByLetter = async (
 
 			return {
 				id: `${sheet.getCellByA1(`A${idx}`).value}${idx}`,
+				cellId: `${excelColumnForWeek[0]}${idx}`,
 				day: sheet.getCellByA1(`A${idx}`).value,
 				weight: +decimalWeight || +weight || result[0], // ! kg weights or "BW" or "Stand .."
 				...(hasKGUnit ? { unit: "kg" } : { unit: "unknown" }),
