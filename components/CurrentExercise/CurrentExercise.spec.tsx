@@ -1,6 +1,8 @@
+import { FC } from "react";
 import { ExcelData } from "@/pages/training/[week]/[day]";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import CurrentExercise from ".";
+import { MockedDataSheetProvider } from "../../specs/MockedProviders";
 
 const mockData: ExcelData[] = [
 	{
@@ -12,6 +14,7 @@ const mockData: ExcelData[] = [
 		type: "barbell",
 		result: {
 			id: "C20",
+			cellId: "A1",
 			day: "C",
 			weight: 252.5,
 			unit: "kg",
@@ -28,6 +31,7 @@ const mockData: ExcelData[] = [
 		type: "barbell",
 		result: {
 			id: "C21",
+			cellId: "A1",
 			day: "C",
 			weight: 227.5,
 			unit: "kg",
@@ -44,6 +48,7 @@ const mockData: ExcelData[] = [
 		type: "barbell",
 		result: {
 			id: "C22",
+			cellId: "A1",
 			day: "C",
 			weight: 165,
 			unit: "kg",
@@ -78,6 +83,8 @@ const mockData: ExcelData[] = [
 		type: "machine",
 		result: {
 			id: "C25",
+			cellId: "A1",
+
 			day: "C",
 			weight: "Stand 13",
 			unit: "unknown",
@@ -96,14 +103,30 @@ const mockData: ExcelData[] = [
 	},
 ];
 
-test("renders the card data", () => {
-	const { asFragment } = render(<CurrentExercise data={mockData} />);
+type Props = {
+	data: ExcelData[];
+};
 
-	expect(asFragment()).toMatchSnapshot();
+const CurrentExerciseWithProvider: FC<Props> = ({ data }) => (
+	<MockedDataSheetProvider data={data} updateSheet={() => {}}>
+		<CurrentExercise />
+	</MockedDataSheetProvider>
+);
+
+test("renders the card data", () => {
+	render(<CurrentExerciseWithProvider data={mockData} />);
+	screen.getByText("1) Cluster Deadlift (1MIN RI)");
+	screen.getByText("252.5");
+	screen.getByText("kg");
 });
 
 test("show the finish button when there are no exercises left", async () => {
-	render(<CurrentExercise data={mockData.slice(mockData.length - 1)} />);
+	render(
+		<CurrentExerciseWithProvider
+			data={mockData.slice(mockData.length - 1)}
+		/>
+	);
+
 	const doneButton = screen.getByText(/Go to next/);
 
 	fireEvent.click(doneButton);

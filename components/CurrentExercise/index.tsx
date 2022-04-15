@@ -8,16 +8,16 @@ import Title from "../Title";
 import { Bars, divideWeightForPlates } from "../WeightIndicator/utils";
 import SkipExercise from "./SkipExercise";
 import ActionsContainer from "./ActionsContainer";
-import { ExcelData } from "@/pages/training/[week]/[day]";
 import Button from "../Button";
 import { getDatabase, ref, set } from "firebase/database";
 import { format } from "date-fns";
+import { useDataSheet } from "../../providers/SheetDataProvider";
 
-type CurrentExerciseProps = {
-	data: ExcelData[];
-};
+type CurrentExerciseProps = {};
 
-const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
+const CurrentExercise: FC<CurrentExerciseProps> = () => {
+	const { data } = useDataSheet();
+
 	const [exercises, setExercises] = useState({
 		total: 0,
 		current: data[0],
@@ -117,7 +117,7 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 								<span className={styles.subTitle}>
 									Set {currentSet.count}
 								</span>
-								{exercises.current.type === "barbell" && (
+								{/* {exercises.current.type === "barbell" && (
 									<WeightIndicator
 										size="small"
 										weights={divideWeightForPlates(
@@ -125,7 +125,7 @@ const CurrentExercise: FC<CurrentExerciseProps> = ({ data }) => {
 												Bars.Olympic
 										)}
 									/>
-								)}
+								)} */}
 								<WeightLine
 									weight={exercises.current.result.weight}
 									reps={exercises.current.reps}

@@ -6,6 +6,7 @@ import { GoogleSpreadsheet } from "google-spreadsheet";
 import { getBasicProgramInfo, loadColumnDataByLetter } from "../../../util";
 import CurrentExercise from "@/components/CurrentExercise";
 import Header from "@/components/Header";
+import { SheetDataProvider } from "providers/SheetDataProvider";
 
 export type ExcelData = {
 	id: string;
@@ -19,6 +20,7 @@ export type ExcelData = {
 
 type Result = {
 	id: string;
+	cellId: string;
 	day: DayValues;
 	weight: number | string;
 	unit: string;
@@ -33,19 +35,19 @@ type TrainingPageProps = {
 const TrainingPage: NextPage<TrainingPageProps> = ({ data }) => {
 	const { query } = useRouter();
 
-	console.log(data);
-
 	const noTrainingPrescription = data.filter((item) => item.result && []);
 
 	return (
-		<Layout>
-			<Header pageTitle={query.day} />
-			{noTrainingPrescription.length === 0 ? (
-				<h1>No prescribed weights yet.</h1>
-			) : (
-				<CurrentExercise data={data} />
-			)}
-		</Layout>
+		<SheetDataProvider data={{ data }}>
+			<Layout>
+				<Header pageTitle={query.day} />
+				{noTrainingPrescription.length === 0 ? (
+					<h1>No prescribed weights yet.</h1>
+				) : (
+					<CurrentExercise />
+				)}
+			</Layout>
+		</SheetDataProvider>
 	);
 };
 
