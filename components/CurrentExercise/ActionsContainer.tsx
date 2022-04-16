@@ -7,16 +7,37 @@ import ChevronIcon from "../../public/icons/chevron.svg";
 import styles from "./styles.module.scss";
 import PreviousResultsButton from "../PreviousResultsButton";
 import Drawer from "../Drawer";
-import { PlateNumbers } from "../WeightIndicator";
 import ChangeLoadDrawerContent from "../ChangeLoadDrawerContent";
+import { ExcelData } from "@/pages/training/[week]/[day]";
+import { Bars, divideWeightForPlates } from "../WeightIndicator/utils";
+import { useDataSheet } from "providers/SheetDataProvider";
 
 type ActionsContainerProps = {
 	markDone: () => void;
-	weight: PlateNumbers;
+	currentExercise: ExcelData;
 };
 
-const ActionsContainer: FC<ActionsContainerProps> = ({ markDone, weight }) => {
+const ActionsContainer: FC<ActionsContainerProps> = ({
+	markDone,
+	currentExercise,
+}) => {
 	const [showDrawer, setShowDrawer] = useState({ type: "", open: false });
+
+	const [loadedBar, setLoadedBar] = useState({
+		plates: divideWeightForPlates(
+			(currentExercise.result &&
+				+currentExercise.result?.weight - Bars.Olympic) ||
+				0
+		),
+		weight:
+			(currentExercise.result && +currentExercise.result?.weight) || 0,
+	});
+
+	const { data, updateSheet } = useDataSheet();
+
+	const getCurrentCellId = data.find(
+		(item) => item?.result?.cellId === currentExercise.result?.cellId
+	)?.result?.cellId;
 
 	return (
 		<section className={styles.actionsContainer}>
@@ -55,8 +76,21 @@ const ActionsContainer: FC<ActionsContainerProps> = ({ markDone, weight }) => {
 				</Button>
 			</div>
 			{showDrawer.open && (
-				<Drawer>
-					<ChangeLoadDrawerContent weight={weight} />
+				<Drawer
+					onClick={() =>
+						updateSheet({
+							cell: getCurrentCellId || "",
+							value: {
+								weight: loadedBar.weight,
+							},
+						})
+					}
+				>
+					<ChangeLoadDrawerContent
+						currentExercise={currentExercise}
+						loadedBar={loadedBar}
+						setLoadedBar={setLoadedBar}
+					/>
 				</Drawer>
 			)}
 		</section>

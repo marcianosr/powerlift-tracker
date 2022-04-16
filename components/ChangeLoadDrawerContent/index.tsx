@@ -1,4 +1,6 @@
-import React, { FC, useState } from "react";
+import { ExcelData } from "@/pages/training/[week]/[day]";
+import { useDataSheet } from "providers/SheetDataProvider";
+import React, { FC, useEffect, useState } from "react";
 import HorizontalSwipe, { Direction } from "../HorizontalSwipe";
 import Title from "../Title";
 import WeightIndicator, {
@@ -10,7 +12,12 @@ import { Bars, divideWeightForPlates } from "../WeightIndicator/utils";
 import styles from "./styles.module.scss";
 
 type ChangeLoadDrawerContentProps = {
-	weight: number;
+	currentExercise: ExcelData;
+	loadedBar: {
+		weight: number;
+		plates: PlateNumbers[];
+	};
+	setLoadedBar: (state: { plates: PlateNumbers[]; weight: number }) => void;
 };
 
 const sortedPlates = Object.entries(PLATE_MAPPING)
@@ -54,13 +61,10 @@ const removePlates = (
 };
 
 const ChangeLoadDrawerContent: FC<ChangeLoadDrawerContentProps> = ({
-	weight,
+	currentExercise,
+	loadedBar,
+	setLoadedBar,
 }) => {
-	const [loadedBar, setLoadedBar] = useState({
-		plates: divideWeightForPlates(+weight - Bars.Olympic),
-		weight,
-	});
-
 	return (
 		<>
 			<Title tag="h3" variant="small" shade="light">

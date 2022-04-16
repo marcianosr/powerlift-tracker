@@ -117,7 +117,7 @@ const CurrentExercise: FC<CurrentExerciseProps> = () => {
 								<span className={styles.subTitle}>
 									Set {currentSet.count}
 								</span>
-								{/* {exercises.current.type === "barbell" && (
+								{exercises.current.type === "barbell" && (
 									<WeightIndicator
 										size="small"
 										weights={divideWeightForPlates(
@@ -125,7 +125,7 @@ const CurrentExercise: FC<CurrentExerciseProps> = () => {
 												Bars.Olympic
 										)}
 									/>
-								)} */}
+								)}
 								<WeightLine
 									weight={exercises.current.result.weight}
 									reps={exercises.current.reps}
@@ -138,7 +138,7 @@ const CurrentExercise: FC<CurrentExerciseProps> = () => {
 					</Card>
 					<ActionsContainer
 						markDone={markDone}
-						weight={exercises.current.result.weight as PlateNumbers}
+						currentExercise={exercises.current}
 					/>
 				</>
 			)}
