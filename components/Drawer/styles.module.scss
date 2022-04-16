@@ -29,4 +29,14 @@
 	> h3 {
 		justify-self: center;
 	}
+
+	.buttonContainer {
+		position: absolute;
+		top: -70px;
+		right: 10px;
+	}
+	button {
+		text-align: center;
+		padding-left: 0;
+	}
 }
