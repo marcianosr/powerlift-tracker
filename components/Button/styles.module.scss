@@ -54,3 +54,12 @@
 .alignRight {
 	margin-left: auto;
 }
+
+.dark {
+	--background: var(--black);
+	height: 60px;
+
+	.text {
+		font-size: 1rem;
+	}
+}

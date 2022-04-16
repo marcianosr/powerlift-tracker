@@ -5,7 +5,7 @@ import styles from "./styles.module.scss";
 type ButtonProps = {
 	iconLeft?: ReactElement;
 	iconRight?: ReactElement;
-	variant?: "large" | "smallRound";
+	variant?: "large" | "smallRound" | "dark";
 	align?: "left" | "right";
 	onClick?: () => void;
 	testId?: string;
