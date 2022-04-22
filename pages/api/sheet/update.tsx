@@ -1,5 +1,6 @@
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { NextApiRequest, NextApiResponse } from "next";
+import { SheetUpdateKeys } from "providers/SheetDataProvider";
 
 const update = async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method !== "POST") return;
@@ -19,14 +20,34 @@ const update = async (req: NextApiRequest, res: NextApiResponse) => {
 
 	await doc.loadInfo();
 	const sheet = doc.sheetsByTitle["Trainingsweken"]; // ? improve: get training by tab name
-	await sheet.loadCells("A1:G15");
-	const a1Cell = sheet.getCellByA1("G3");
-	a1Cell.value = "Furnace Fun!";
-	console.log("update backend", req.body);
+	const parsedState: SheetUpdateKeys<Record<string, string>> = JSON.parse(
+		// ? improve typing
+		req.body
+	);
 
-	await sheet.saveUpdatedCells();
+	await sheet.loadCells(`A1:${parsedState.cell}`); // ? optimize this later. A1 should be one letter before the state letter.
+	const a1Cell = sheet.getCellByA1(parsedState.cell);
 
-	// console.log("json", JSON.stringify(sheet));
+	if (!a1Cell.value) {
+		console.log("no value");
+
+		a1Cell.value = `${parsedState.weight}kg x`;
+
+		await sheet.saveUpdatedCells();
+
+		return res.status(201).json({
+			message: `Succesfully updated sheet`,
+			data: {},
+		});
+	}
+
+	if (a1Cell.value) {
+		const [_, reps] = String(a1Cell.value).split("x");
+		const modifiedValue = [`${parsedState.weight}kg x`, reps]; // ! Make nicer later...?
+
+		a1Cell.value = modifiedValue.join("").toString(); // Prevent toString from adding comma's https://stackoverflow.com/questions/30508242/javascript-split-adding-extra-commas
+		await sheet.saveUpdatedCells();
+	}
 
 	return res.status(201).json({
 		message: `Succesfully updated sheet`,

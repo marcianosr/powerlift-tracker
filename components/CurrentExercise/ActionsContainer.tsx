@@ -17,6 +17,10 @@ type ActionsContainerProps = {
 	currentExercise: ExcelData;
 };
 
+type WeightUpdater = {
+	weight: number;
+};
+
 const ActionsContainer: FC<ActionsContainerProps> = ({
 	markDone,
 	currentExercise,
@@ -78,11 +82,9 @@ const ActionsContainer: FC<ActionsContainerProps> = ({
 			{showDrawer.open && (
 				<Drawer
 					onClick={() =>
-						updateSheet({
+						updateSheet<WeightUpdater>({
 							cell: getCurrentCellId || "",
-							value: {
-								weight: loadedBar.weight,
-							},
+							weight: loadedBar.weight,
 						})
 					}
 				>
