@@ -1,9 +1,16 @@
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { NextApiRequest, NextApiResponse } from "next";
 import { SheetUpdateKeys } from "providers/SheetDataProvider";
+import { getActiveSheetFromDatabase } from "../..";
 
 const update = async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method !== "POST") return;
+
+	const activeSheetFromDB = await getActiveSheetFromDatabase();
+
+	if (!activeSheetFromDB) {
+		throw new Error("No sheet name is saved in the DB.");
+	}
 
 	const creds = require("../../../powerlift-339515-4c4a82b74db1.json"); // the file saved above
 	const doc = new GoogleSpreadsheet(
@@ -19,7 +26,8 @@ const update = async (req: NextApiRequest, res: NextApiResponse) => {
 	});
 
 	await doc.loadInfo();
-	const sheet = doc.sheetsByTitle["Trainingsweken"]; // ? improve: get training by tab name
+
+	const sheet = doc.sheetsByTitle[activeSheetFromDB.activeSheet]; // ? What happens if no sheet is given?
 	const parsedState: SheetUpdateKeys<Record<string, string>> = JSON.parse(
 		// ? improve typing
 		req.body

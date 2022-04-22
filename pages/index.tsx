@@ -177,7 +177,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 	};
 };
 
-const getActiveSheetFromDatabase = async () => {
+export const getActiveSheetFromDatabase = async () => {
 	const database = ref(getDatabase());
 
 	return get(child(database, `user/marciano`))
