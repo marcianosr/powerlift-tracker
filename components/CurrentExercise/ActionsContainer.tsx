@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Button from "../Button";
 import WeightsIcon from "../../public/icons/weights.svg";
 import DoneIcon from "../../public/icons/done.svg";
@@ -26,16 +26,20 @@ const ActionsContainer: FC<ActionsContainerProps> = ({
 	currentExercise,
 }) => {
 	const [showDrawer, setShowDrawer] = useState({ type: "", open: false });
+	const [loadedBar, setLoadedBar] = useState({});
 
-	const [loadedBar, setLoadedBar] = useState({
-		plates: divideWeightForPlates(
-			(currentExercise.result &&
-				+currentExercise.result?.weight - Bars.Olympic) ||
-				0
-		),
-		weight:
-			(currentExercise.result && +currentExercise.result?.weight) || 0,
-	});
+	useEffect(() => {
+		setLoadedBar({
+			plates: divideWeightForPlates(
+				(currentExercise.result &&
+					+currentExercise.result?.weight - Bars.Olympic) ||
+					0
+			),
+			weight:
+				(currentExercise.result && +currentExercise.result?.weight) ||
+				0,
+		});
+	}, [currentExercise]);
 
 	const { data, updateSheet } = useDataSheet();
 
