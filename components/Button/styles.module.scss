@@ -51,6 +51,17 @@
 	}
 }
 
+.extraSmallRound {
+	min-width: auto;
+	width: 60px;
+	height: 60px;
+	border-radius: 50px;
+
+	.text {
+		text-align: center;
+	}
+}
+
 .alignRight {
 	margin-left: auto;
 }

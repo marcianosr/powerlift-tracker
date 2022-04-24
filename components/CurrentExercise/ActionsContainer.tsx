@@ -11,22 +11,37 @@ import ChangeLoadDrawerContent from "../ChangeLoadDrawerContent";
 import { ExcelData } from "@/pages/training/[week]/[day]";
 import { Bars, divideWeightForPlates } from "../WeightIndicator/utils";
 import { useDataSheet } from "providers/SheetDataProvider";
+import { PlateNumbers } from "../WeightIndicator";
 
 type ActionsContainerProps = {
 	markDone: () => void;
 	currentExercise: ExcelData;
+	currentSet: CurrentSet;
+};
+
+type CurrentSet = {
+	total: number;
+	count: number;
 };
 
 type WeightUpdater = {
 	weight: number;
+	currentSet: CurrentSet;
 };
 
 const ActionsContainer: FC<ActionsContainerProps> = ({
 	markDone,
 	currentExercise,
+	currentSet,
 }) => {
 	const [showDrawer, setShowDrawer] = useState({ type: "", open: false });
-	const [loadedBar, setLoadedBar] = useState({});
+	const [loadedBar, setLoadedBar] = useState<{
+		plates: PlateNumbers[];
+		weight: number;
+	}>({
+		plates: [],
+		weight: 0,
+	});
 
 	useEffect(() => {
 		setLoadedBar({
@@ -85,10 +100,17 @@ const ActionsContainer: FC<ActionsContainerProps> = ({
 			</div>
 			{showDrawer.open && (
 				<Drawer
+					onClose={() =>
+						setShowDrawer({
+							type: "change-load",
+							open: !showDrawer.open,
+						})
+					}
 					onClick={() =>
 						updateSheet<WeightUpdater>({
 							cell: getCurrentCellId || "",
 							weight: loadedBar.weight,
+							currentSet,
 						})
 					}
 				>
