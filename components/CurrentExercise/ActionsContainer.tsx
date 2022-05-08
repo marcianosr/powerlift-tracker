@@ -10,7 +10,7 @@ import Drawer from "../Drawer";
 import ChangeLoadDrawerContent from "../ChangeLoadDrawerContent";
 import { ExcelData } from "@/pages/training/[week]/[day]";
 import { Bars, divideWeightForPlates } from "../WeightIndicator/utils";
-import { useDataSheet } from "providers/SheetDataProvider";
+import { useDataSheet } from "../../providers/SheetDataProvider";
 import { PlateNumbers } from "../WeightIndicator";
 
 type ActionsContainerProps = {
