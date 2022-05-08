@@ -55,10 +55,75 @@ const mapping = [
 ];
 
 test.each(mapping)(
-	"should update the weight in the right position based on the current set",
+	"should update the weight in the right position based on the current set, when multiple weights per set are given",
 	(mapping) => {
 		expect(formatToExcelString(mapping.value, mapping.parsedState)).toBe(
 			mapping.expected
 		);
 	}
 );
+
+test("should update the weight in the right position based on the current set, when a single weight per set is given", () => {
+	const value = "120kg x 5, 5, 5, 5";
+	const parsedState = {
+		cell: "J",
+		weight: 170,
+		currentSet: { total: 4, count: 2 },
+	};
+
+	expect(value).toBe("120kg x 5, 5, 5, 5");
+	const updated = formatToExcelString(value, parsedState);
+	expect(updated).toBe("120kg x 5 / 170kg x 5, 5, 5");
+});
+
+test("should update the weight in the right position based on the current set, when a single weight per set is given", () => {
+	const value = "120kg x 5, 5, 5, 5";
+	const parsedState = {
+		cell: "J",
+		weight: 170,
+		currentSet: { total: 4, count: 3 },
+	};
+
+	expect(value).toBe("120kg x 5, 5, 5, 5");
+	const updated = formatToExcelString(value, parsedState);
+	expect(updated).toBe("120kg x 5, 5 / 170kg x 5, 5");
+});
+
+test("should update the weight in the right position based on the current set, when a single weight per set is given", () => {
+	const value = "120kg x 5, 5, 5, 5";
+	const parsedState = {
+		cell: "J",
+		weight: 170,
+		currentSet: { total: 4, count: 4 },
+	};
+
+	expect(value).toBe("120kg x 5, 5, 5, 5");
+	const updated = formatToExcelString(value, parsedState);
+	expect(updated).toBe("120kg x 5, 5, 5 / 170kg x 5");
+});
+
+test("should update the weight in the right position based on the current set, when a single weight per set is given", () => {
+	const value = "120kg x 5, 5, 5, 5, 5, 5";
+	const parsedState = {
+		cell: "J",
+		weight: 170,
+		currentSet: { total: 6, count: 4 },
+	};
+
+	expect(value).toBe("120kg x 5, 5, 5, 5, 5, 5");
+	const updated = formatToExcelString(value, parsedState);
+	expect(updated).toBe("120kg x 5, 5, 5 / 170kg x 5, 5, 5");
+});
+
+test.only("should update the weight in the right position based on the current set, when a single weight per set is given", () => {
+	const value = "120kg x 5, 5 / 170kg x 5, 5";
+	const parsedState = {
+		cell: "J",
+		weight: 220,
+		currentSet: { total: 4, count: 4 },
+	};
+
+	expect(value).toBe("120kg x 5, 5 / 170kg x 5, 5");
+	const updated = formatToExcelString(value, parsedState);
+	expect(updated).toBe("120kg x 5, 5 / 170kg x 5 / 220kg x 5");
+});

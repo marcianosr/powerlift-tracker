@@ -1,6 +1,7 @@
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { NextApiRequest, NextApiResponse } from "next";
 import { SheetUpdateKeys } from "providers/SheetDataProvider";
+import { formatToExcelString } from "util/updateExcelStringWeight";
 import { getActiveSheetFromDatabase } from "../..";
 
 const update = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -28,7 +29,7 @@ const update = async (req: NextApiRequest, res: NextApiResponse) => {
 	await doc.loadInfo();
 
 	const sheet = doc.sheetsByTitle[activeSheetFromDB.activeSheet]; // ? What happens if no sheet is given?
-	const parsedState: SheetUpdateKeys<Record<string, string>> = JSON.parse(
+	const parsedState: SheetUpdateKeys<Record<string, any>> = JSON.parse(
 		// ? improve typing
 		req.body
 	);
@@ -50,10 +51,12 @@ const update = async (req: NextApiRequest, res: NextApiResponse) => {
 	}
 
 	if (a1Cell.value) {
-		const [_, reps] = String(a1Cell.value).split("x");
-		const modifiedValue = [`${parsedState.weight}kg x`, reps]; // ! Make nicer later...?
+		const updated = formatToExcelString(
+			a1Cell.value.toString(),
+			parsedState
+		);
 
-		a1Cell.value = modifiedValue.join("").toString(); // Prevent toString from adding comma's https://stackoverflow.com/questions/30508242/javascript-split-adding-extra-commas
+		a1Cell.value = updated; // Prevent toString from adding comma's https://stackoverflow.com/questions/30508242/javascript-split-adding-extra-commas
 		await sheet.saveUpdatedCells();
 	}
 
