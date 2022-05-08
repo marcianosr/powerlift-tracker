@@ -139,6 +139,7 @@ const CurrentExercise: FC<CurrentExerciseProps> = () => {
 					<ActionsContainer
 						markDone={markDone}
 						currentExercise={exercises.current}
+						currentSet={currentSet}
 					/>
 				</>
 			)}
